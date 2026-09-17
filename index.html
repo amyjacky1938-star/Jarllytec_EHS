@@ -423,6 +423,8 @@
     <script>
     const POWER_AUTOMATE_SAVE_URL = "https://default5e08b912309f4900b9e179fae11d8e.2a.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/07/workflows/ae80a43b0d5e4062bf5b532833b1dad0/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=2DYPzn3BsDuCv6xsFn-pwC7wtxo1nTdakVZscqYmbMo";
     const POWER_AUTOMATE_GET_URL = "https://default5e08b912309f4900b9e179fae11d8e.2a.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/10/workflows/7637f49fb50f46e1a769b1951f916f06/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=YTv8NBrnDnNTtjE2TnWsE7oF5Zn39ksRfjjXuco-6iA";
+    const POWER_AUTOMATE_PHOTO_URL = "https://default5e08b912309f4900b9e179fae11d8e.2a.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/14/workflows/b2b81980df674395880bdef1bd9cc9ed/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=zbF7dLK2_kUVDC3AAiTTEKRfoqYGtPy0Dal4JvLjOV4";
+
 
     // 定義合法的授權工號白名單陣列（作為密碼識別）
     const VALID_EMP_IDS = [
@@ -803,6 +805,43 @@
         }
     }
 
+function loadOneDriveImage(imgElementId, fileName) {
+    const imgEl = document.getElementById(imgElementId);
+    if (!fileName || fileName === "undefined" || fileName === "null" || fileName.trim() === "") {
+        imgEl.src = "https://placehold.co/400x300?text=No+Image";
+        return;
+    }
+
+    // 如果本身已經是 Base64 或完整網址，直接顯示
+    if (fileName.startsWith('data:image') || fileName.startsWith('http://') || fileName.startsWith('https://')) {
+        imgEl.src = fileName;
+        return;
+    }
+
+    imgEl.src = "https://placehold.co/400x300?text=Loading+Photo...";
+
+    // 透過 POST 請求呼叫 Power Automate 取得 OneDrive 圖片
+    fetch(POWER_AUTOMATE_PHOTO_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fileName: fileName.trim() })
+    })
+    .then(res => {
+        if (!res.ok) throw new Error("圖片載入失敗");
+        return res.blob();
+    })
+    .then(blob => {
+        const objectURL = URL.createObjectURL(blob);
+        imgEl.src = objectURL;
+    })
+    .catch(err => {
+        console.error("讀取雲端照片錯誤:", err);
+        imgEl.src = "https://placehold.co/400x300?text=Load+Failed";
+    });
+}
+
+
+
     function executeReportSubmit() {
         const desc = document.getElementById('inputDescription').value.trim();
         if (!desc) { alert("❌ 請填寫異常缺失說明！"); return; }
@@ -1035,8 +1074,8 @@
         document.getElementById('detReportTime').innerText = item.reportTime || "-";
         document.getElementById('detDescription').innerText = item.description || "-";
 
-        document.getElementById('imgBefore').src = formatBase64Src(item.beforePhoto);
-        document.getElementById('imgAfter').src = formatBase64Src(item.afterPhoto);
+        loadOneDriveImage('imgBefore', item.beforePhoto);
+        loadOneDriveImage('imgAfter', item.afterPhoto);
 
         currentWorkerPhotoBase64 = item.afterPhoto || "";
 
