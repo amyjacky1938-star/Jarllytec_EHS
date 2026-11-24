@@ -7,6 +7,9 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="兆利 EHS">
 <meta name="theme-color" content="#14532d">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
 <script>
   /* ===== 設定區：只需要改這裡 ===== */
   const CONFIG = {
@@ -2638,5 +2641,9 @@ function loadOneDriveImage(imgElementId, fileName) {
 })();
 </script>
 
+<script>
+/* 讓瀏覽器可以「安裝成應用程式」（桌面圖示、獨立視窗） */
+if ("serviceWorker" in navigator) { window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js").catch(function () {}); }); }
+</script>
 </body>
 </html>
