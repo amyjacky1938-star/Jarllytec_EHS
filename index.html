@@ -1,13 +1,182 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EHS 職安衛通報系統 | Pro Ultra</title>
-    <style>
-        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>兆利 EHS 智慧管理平台</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="兆利 EHS">
+<meta name="theme-color" content="#14532d">
+<script>
+  /* ===== 設定區：只需要改這裡 ===== */
+  const CONFIG = {
+    logoUrl: "",   // 另用網址的 Logo 時填這裡；留空就用內建的兆利 Logo
+    company: "兆利科技工業股份有限公司",
+    orgName: "職業安全衛生室",
+    links: {
+      fire:   "https://amyjacky1938-star.github.io/fire-check/",
+      water:  "https://amyjacky1938-star.github.io/water-check/",
+      health: "https://claude.ai/artifact/X3Dc41ccjH2VcHfgcF5q2Q",
+      paper:  "https://claude.ai/artifact/B5tcRNnaer7bEhuSWWqA6o",   // 管理部：影印紙統計系統
+      mail:   "https://claude.ai/artifact/MsV4qyhg33SXRRcZ6c3Ddw"    // 管理部：掛號信簽收簿
+    },
+    adminDepts: ["管理部", "勞安室", "集團管理處"],   // 哪些部門登入後看得到「管理部專區」
+    depts: ["勞安室","管理部","製造一部","製造二部","製造三部","光纖業務部","研發一部","研發二部","研發三部","研發四部",
+            "集團管理處","集團人資處","集團資訊處","集團財務處","集團業務中心","專案開發部","工程部","品保部","專利商標部","資材部",
+            "品質中心","總經理室","永續發展部"]
+  };
+</script>
+<style>
+  :root {
+    --bg: #f3f6f4; --surface: #ffffff; --ink: #17211c; --muted: #55625b; --line: #dbe3de;
+    --brand: #14532d; --brand-2: #1f7a4a; --brand-soft: #e3f1e8;
+    --fire: #b42318; --fire-soft: #fdecea; --water: #0b6aa2; --water-soft: #e4f1fa;
+    --ehs: #9a5b00; --ehs-soft: #fdf1dc; --health: #5b3fa3; --health-soft: #eeeafa;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+    background: var(--bg); color: var(--ink); min-height: 100vh;
+    padding: env(safe-area-inset-top, 0) 0 env(safe-area-inset-bottom, 0);
+  }
+  .hidden, [hidden] { display: none !important; }
+  .wrap { max-width: 992px; margin: 0 auto; padding: 0 16px 40px; }
+  #signin { max-width: 480px; margin-left: auto; margin-right: auto; }
 
-        :root {
+  .coband { background: #fff; padding: 10px max(16px, env(safe-area-inset-left, 0px)); border-bottom: 1px solid var(--line); }
+  .onsite { display: inline-flex; align-items: center; gap: 4px; align-self: flex-start; font-size: 12px; font-weight: 700; color: #475569; background: #eef2f0; border-radius: 999px; padding: 3px 9px; margin-top: auto; }
+  .dlg { position: fixed; inset: 0; background: rgba(15,23,42,.55); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 100; }
+  .dlg-box { background: #fff; border-radius: 22px; padding: 26px 22px 20px; max-width: 380px; width: 100%; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,.25); }
+  .dlg-ic { width: 60px; height: 60px; border-radius: 18px; background: var(--brand-soft); color: var(--brand); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; }
+  .dlg-box h3 { margin: 0 0 8px; font-size: 18px; }
+  .dlg-box p { margin: 0 0 8px; font-size: 14.5px; line-height: 1.65; color: #36423c; }
+  .dlg-box .dlg-sub { font-size: 13px; color: var(--muted); }
+  .dlg-btns { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+  .dlg-btns button { height: 48px; border-radius: 14px; font: inherit; font-weight: 700; font-size: 15px; cursor: pointer; }
+  .dlg-go { border: 0; background: var(--brand); color: #fff; }
+  .dlg-ok { border: 1px solid var(--line); background: #fff; color: var(--ink); }
+  .coplate { background: #fff; border-radius: 12px; padding: 7px 12px; display: flex; align-items: center; flex-shrink: 0; max-width: 100%; }
+  .coplate img { display: block; height: 32px; width: auto; max-width: 100%; }
+  .brand { flex-wrap: wrap; row-gap: 10px; }
+  .brand .ttl { padding-left: 14px; border-left: 1px solid rgba(255,255,255,.35); }
+  @media (max-width: 560px) { .coplate img { height: 26px; } .brand .ttl { padding-left: 0; border-left: 0; flex-basis: 100%; } .top-row { align-items: flex-start; } }
+  .coband img { display: block; height: 34px; width: auto; max-width: 100%; object-fit: contain; }
+  header.top {
+    background: var(--brand); color: #fff; padding: 22px 20px 26px; border-radius: 0 0 28px 28px;
+    box-shadow: 0 6px 18px rgba(20,83,45,.18);
+  }
+  .top-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; max-width: 960px; margin: 0 auto; }
+  .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .logo { width: 44px; height: 44px; border-radius: 12px; background: #fff; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+  .logo img { max-width: 100%; max-height: 100%; object-fit: contain; padding: 4px; }
+  .brand h1 { margin: 0; font-size: 20px; line-height: 1.2; }
+  .brand p { margin: 2px 0 0; font-size: 12px; opacity: .85; }
+  .lang { display: flex; gap: 2px; background: rgba(0,0,0,.2); border-radius: 10px; padding: 3px; flex-shrink: 0; }
+  .lang button { border: 0; background: transparent; color: #fff; font: inherit; font-size: 12px; font-weight: 700; padding: 6px 10px; border-radius: 8px; cursor: pointer; }
+  .lang button[aria-pressed="true"] { background: #fff; color: var(--brand); }
+
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 22px 20px; margin-top: 18px; }
+  .card h2 { margin: 0 0 4px; font-size: 19px; }
+  .sub { margin: 0 0 18px; color: var(--muted); font-size: 14px; line-height: 1.6; }
+  label.f { display: block; font-size: 14px; font-weight: 700; color: #36423c; margin: 14px 0 6px; }
+  input[type=text], select {
+    width: 100%; height: 48px; border: 1px solid #c4cfc8; border-radius: 12px; padding: 0 14px;
+    font: inherit; font-size: 16px; color: var(--ink); background: #fafcfb;
+  }
+  input:focus, select:focus { outline: 2px solid var(--brand-2); outline-offset: 1px; background: #fff; }
+  .check { display: flex; align-items: center; gap: 8px; margin-top: 14px; font-size: 14px; color: var(--muted); }
+  .check input { width: 18px; height: 18px; accent-color: var(--brand); }
+  .btn { width: 100%; height: 52px; border: 0; border-radius: 14px; background: var(--brand); color: #fff; font: inherit; font-size: 17px; font-weight: 700; cursor: pointer; margin-top: 20px; }
+  .btn:active { transform: scale(.99); }
+  .err { color: var(--fire); font-size: 14px; margin-top: 10px; min-height: 1em; }
+  .note { margin-top: 16px; font-size: 13px; color: var(--muted); line-height: 1.6; background: #f3f6f4; border-radius: 10px; padding: 10px 12px; }
+
+  .hello { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 18px; }
+  .hello .who { min-width: 0; }
+  .hello .who b { display: block; font-size: 19px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .hello .who span { font-size: 14px; color: var(--muted); }
+  .linkbtn { border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 10px; padding: 9px 12px; font: inherit; font-size: 14px; cursor: pointer; flex-shrink: 0; }
+
+  .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
+  @media (min-width: 760px) { .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  a.tile, div.tile {
+    display: flex; flex-direction: column; gap: 10px; text-decoration: none; color: var(--ink);
+    background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 18px 16px; min-height: 150px;
+    position: relative;
+  }
+  a.tile:active { transform: scale(.98); }
+  .ic { width: 46px; height: 46px; border-radius: 14px; display: flex; align-items: center; justify-content: center; }
+  .tile b { font-size: 17px; }
+  .tile small { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .tile.fire .ic { background: var(--fire-soft); color: var(--fire); }
+  .tile.water .ic { background: var(--water-soft); color: var(--water); }
+  .tile.ehs .ic { background: var(--ehs-soft); color: var(--ehs); }
+  .tile.items { grid-column: 1 / -1; min-height: 0; flex-direction: row; align-items: center; gap: 14px; }
+  .tile.items .ic { background: #e6eef6; color: #2f4f73; flex-shrink: 0; }
+  .tile.items .txt { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .tile.health { grid-column: 1 / -1; min-height: 0; flex-direction: row; align-items: center; gap: 14px; border-color: #cfc5ee; }
+  .tile.health .ic { background: var(--health-soft); color: var(--health); flex-shrink: 0; }
+  .tile.health .txt { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .tile.admin { grid-column: 1 / -1; min-height: 0; flex-direction: row; align-items: center; gap: 14px; border-color: #b9d3dd; }
+  .tile.admin .ic { background: #e2f0f4; color: #0d5f73; flex-shrink: 0; }
+  .tile.admin .txt { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .tile.admin .lock { color: #0d5f73; background: #e2f0f4; }
+  .lock { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; color: var(--health); background: var(--health-soft); border-radius: 999px; padding: 3px 9px; align-self: flex-start; }
+  .tile.off { opacity: .55; }
+  .tile.off small { color: var(--muted); }
+  footer { text-align: center; font-size: 12px; color: var(--muted); margin-top: 28px; }
+
+/* ===== 點檢紀錄 ===== */
+.tile.rec .ic { background: #e6eef6; color: #2f4f73; }
+#recRoot { min-height: 100vh; background: var(--bg); }
+.rec-top { background: #1f3a5a; color: #fff; padding: 14px 16px 0; position: sticky; top: 0; z-index: 20; }
+.rec-top .row { display: flex; align-items: center; justify-content: space-between; gap: 10px; max-width: 960px; margin: 0 auto; }
+.rec-top h2 { margin: 0; font-size: 18px; }
+.rec-top .back { border: 0; background: rgba(255,255,255,.18); color: #fff; font: inherit; font-size: 14px; border-radius: 10px; padding: 8px 12px; cursor: pointer; }
+.rec-tabs { display: flex; gap: 4px; max-width: 960px; margin: 12px auto 0; }
+.rec-tabs button { flex: 1; border: 0; background: transparent; color: rgba(255,255,255,.75); font: inherit; font-weight: 700; font-size: 15px; padding: 10px 6px 12px; border-bottom: 3px solid transparent; cursor: pointer; }
+.rec-tabs button[aria-selected="true"] { color: #fff; border-bottom-color: #fff; }
+.rec-wrap { max-width: 960px; margin: 0 auto; padding: 14px 16px 40px; }
+.seg { display: inline-flex; background: #e3e9e6; border-radius: 12px; padding: 3px; gap: 2px; }
+.seg button { border: 0; background: transparent; font: inherit; font-size: 14px; font-weight: 700; color: var(--muted); padding: 8px 14px; border-radius: 10px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: #fff; color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+.rec-bar { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center; margin-top: 12px; }
+.rec-bar select, .rec-bar input[type=search], .rec-bar input[type=month], .rec-bar input[type=date] {
+  height: 42px; border: 1px solid #c4cfc8; border-radius: 10px; padding: 0 10px; font: inherit; font-size: 15px; background: #fff; color: var(--ink); min-width: 0; width: auto; }
+.rec-bar input[type=search] { flex: 1 1 180px; }
+.rec-bar .grow { flex: 1 1 auto; }
+.rbtn { height: 42px; border: 0; border-radius: 10px; padding: 0 14px; font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; background: var(--brand); color: #fff; white-space: nowrap; }
+.rbtn.ghost { background: #fff; color: var(--ink); border: 1px solid var(--line); }
+.rbtn:disabled { opacity: .5; cursor: default; }
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
+.kpi { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; }
+.kpi span { display: block; font-size: 13px; color: var(--muted); }
+.kpi b { font-size: 26px; font-variant-numeric: tabular-nums; }
+.kpi.ok b { color: #1f7a4a; } .kpi.no b { color: #b42318; } .kpi.ab b { color: #9a5b00; }
+@media (max-width: 560px) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.fprog { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; margin-top: 10px; display: grid; gap: 10px; }
+.fprog .r { display: grid; grid-template-columns: 64px minmax(0,1fr) 92px; gap: 10px; align-items: center; font-size: 14px; }
+.fprog .bar { height: 10px; background: #e3e9e6; border-radius: 5px; overflow: hidden; }
+.fprog .bar i { display: block; height: 100%; background: #1f7a4a; }
+.fprog .v { text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); }
+.tbox { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; margin-top: 12px; overflow-x: auto; }
+.tbox table { width: 100%; min-width: 620px; border-collapse: collapse; font-size: 14px; }
+.tbox th { text-align: left; font-weight: 700; color: var(--muted); background: #f6f8f7; padding: 10px 12px; border-bottom: 1px solid var(--line); white-space: nowrap; position: sticky; top: 0; }
+.tbox td { padding: 10px 12px; border-bottom: 1px solid #eef2ef; vertical-align: top; }
+.tbox td.mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; white-space: nowrap; }
+.st { display: inline-block; font-size: 12.5px; font-weight: 700; border-radius: 999px; padding: 2px 10px; white-space: nowrap; }
+.st.ok { background: #e3f1e8; color: #1a5c3a; } .st.no { background: #fdecea; color: #8e2f1b; } .st.ab { background: #fdf1dc; color: #7a4800; }
+.rec-msg { margin-top: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; font-size: 14px; line-height: 1.7; color: var(--muted); }
+.rec-msg.err { color: #8e2f1b; background: #fdecea; border-color: #f5c6bf; }
+.rec-meta { font-size: 13px; color: var(--muted); margin-top: 10px; }
+.more-row { text-align: center; padding: 12px; }
+</style>
+<style>
+/* ===== EHS 缺失通報（範圍限定在 #ehsRoot） ===== */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
+#ehsRoot { min-height: 100vh; display: flow-root; background: #f1f5f9; }
+#ehsRoot {
             --primary: #1e3a8a;
             --primary-light: #3b82f6;
             --success: #10b981;
@@ -18,8 +187,7 @@
             --modal-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
             --card-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
-
-        body {
+#ehsRoot {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             background-color: #f1f5f9;
             color: var(--text-main);
@@ -27,86 +195,317 @@
             padding: 0;
             box-sizing: border-box;
         }
-
-        .hidden { display: none !important; }
-
-        /* 讀取遮罩 */
-        #loadingOverlay {
+#ehsRoot .hidden { display: none !important; }
+#ehsRoot #loadingOverlay {
             position: fixed; inset: 0; background: rgba(0,0,0,0.6);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             z-index: 10000; color: white; font-size: 18px; font-weight: bold;
         }
-        .spinner {
+#ehsRoot .spinner {
             border: 4px solid rgba(255,255,255,0.3); border-top: 4px solid #fff;
             border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-bottom: 12px;
         }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        /* 登入區塊 */
-        .login-container {
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+#ehsRoot .login-container {
             max-width: 400px; margin: 60px auto; background: white; padding: 30px;
             border-radius: 12px; box-shadow: var(--modal-shadow); text-align: center;
         }
-        .login-container h2 { color: var(--primary); margin-bottom: 24px; }
-        .form-group { text-align: left; margin-bottom: 16px; }
-        .form-group label { display: block; font-size: 14px; font-weight: bold; margin-bottom: 6px; color: #475569; }
-        input, select, textarea {
+#ehsRoot .login-container h2 { color: var(--primary); margin-bottom: 24px; }
+#ehsRoot .form-group { text-align: left; margin-bottom: 16px; }
+#ehsRoot .form-group label { display: block; font-size: 14px; font-weight: bold; margin-bottom: 6px; color: #475569; }
+#ehsRoot input, #ehsRoot select, #ehsRoot textarea {
             width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;
             font-size: 14px; box-sizing: border-box; background: var(--gray-bg);
         }
-        input:focus, select:focus, textarea:focus { border-color: var(--primary-light); outline: none; background: white; }
+#ehsRoot input:focus, #ehsRoot select:focus, #ehsRoot textarea:focus { border-color: var(--primary-light); outline: none; background: white; }
+#ehsRoot .app-container { max-width: 600px; margin: 0 auto; background: white; min-height: 100vh; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+#ehsRoot header { background: var(--primary); color: white; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; }
+#ehsRoot header h1 { margin: 0; font-size: 18px; }
+#ehsRoot .tabs { display: flex; background: #e0f2fe; border-bottom: 1px solid #e2e8f0; }
+#ehsRoot .tab { flex: 1; text-align: center; padding: 12px 6px; font-size: 13px; font-weight: bold; color: #64748b; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 4px; }
+#ehsRoot .tab.active { color: var(--primary); border-bottom: 3px solid var(--primary); background: white; }
+#ehsRoot .page-content { padding: 20px; }
+#ehsRoot .btn-submit { width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+#ehsRoot .btn-submit:hover { background: var(--primary-light); }
+#ehsRoot .btn-logout { background: rgba(255,255,255,0.2); border: none; color: white; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+#ehsRoot .filter-section { display: flex; gap: 8px; margin-bottom: 16px; overflow-x: auto; padding-bottom: 4px; }
+#ehsRoot .filter-badge { padding: 6px 14px; background: #e2e8f0; border-radius: 20px; font-size: 13px; font-weight: 500; cursor: pointer; white-space: nowrap; color: #475569; transition: 0.2s; }
+#ehsRoot .filter-badge.active { background: var(--primary); color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+#ehsRoot .list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 14px; font-weight: bold; }
+#ehsRoot .defect-item { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: var(--card-shadow); transition: 0.2s; cursor: pointer; }
+#ehsRoot .defect-item:hover { transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.08); }
+#ehsRoot .defect-header { display: flex; justify-content: space-between; align-items: center; }
+#ehsRoot .badge { padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; margin-right: 4px; }
+#ehsRoot .badge-category { background: #f1f5f9; color: #1e3a8a; border: 1px solid #cbd5e1; }
+#ehsRoot .badge.todo { background: #fef2f2; color: #ef4444; border: 1px solid #fee2e2; }
+#ehsRoot .badge.processing { background: #fff7ed; color: #ea580c; border: 1px solid #fed7aa; }
+#ehsRoot .badge.checking { background: #fffbeb; color: #d97706; border: 1px solid #fef3c7; }
+#ehsRoot .badge.done { background: #ecfdf5; color: #10b981; border: 1px solid #d1fae5; }
+#ehsRoot .stamp-box { font-size: 11px; color: #94a3b8; margin-top: 8px; border-top: 1px dashed #e2e8f0; padding-top: 6px; }
+#ehsRoot .photo-grid { display: grid; grid-template-columns: 1fr 1fr; align-items: start; gap: 12px; margin-bottom: 16px; margin-top: 10px; }
+#ehsRoot .photo-box { background: #f1f5f9; border-radius: 6px; padding: 8px; text-align: center; border: 1px solid #e2e8f0; overflow: hidden; }
+#ehsRoot .photo-box span { display: block; font-size: 12px; font-weight: bold; margin-bottom: 6px; color: #475569; }
+#ehsRoot .photo-box img { width: 100%; height: auto; max-height: none; object-fit: contain; border-radius: 4px; background: #cbd5e1; cursor: pointer; transition: 0.2s; }
+#ehsRoot .photo-box img:hover { opacity: 0.8; transform: scale(1.02); }
+#ehsRoot .action-btn { width: 100%; padding: 10px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px; transition: 0.2s; }
+#ehsRoot .action-btn.worker { background: #2563eb; color: white; }
+#ehsRoot .action-btn.approve { background: #22c55e; color: white; flex: 1; }
+#ehsRoot .action-btn.reject { background: #ef4444; color: white; flex: 1; }
 
-        /* 主程式區塊 */
-        .app-container { max-width: 600px; margin: 0 auto; background: white; min-height: 100vh; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
-        header { background: var(--primary); color: white; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; }
-        header h1 { margin: 0; font-size: 18px; }
-        
-        /* 頁籤導覽 */
-        .tabs { display: flex; background: #e0f2fe; border-bottom: 1px solid #e2e8f0; }
-        .tab { flex: 1; text-align: center; padding: 12px 6px; font-size: 13px; font-weight: bold; color: #64748b; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 4px; }
-        .tab.active { color: var(--primary); border-bottom: 3px solid var(--primary); background: white; }
+/* ===== EHS：與消防、飲水機點檢頁同一套外觀 ===== */
+#ehsRoot { background: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif; }
+#ehsRoot .login-container { max-width: 420px; margin: 0 auto; padding: 0; border-radius: 0 0 28px 28px; background: transparent; box-shadow: none; overflow: visible; }
+#ehsRoot .login-container > * { margin-left: 16px; margin-right: 16px; }
+#ehsRoot .login-container > .btn-submit { width: calc(100% - 32px); display: block; margin-top: 8px; }
+#ehsRoot .login-container > button:not(.btn-submit) { display: block; margin: 14px auto 0 !important; }
+#ehsRoot .login-container > img:first-child { display: block; margin: 0 16px; width: calc(100% - 32px) !important; max-width: none !important; box-sizing: border-box; background: #fff; padding: 14px 18px; border-radius: 0 0 20px 20px; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+#ehsRoot .login-container h2 { margin: 18px 16px 14px; padding: 22px 20px; border-radius: 22px; background: linear-gradient(135deg, #0f172a 0%, #1e40af 100%); color: #fff; font-size: 20px; font-weight: 900; letter-spacing: .02em; box-shadow: 0 10px 20px -10px rgba(30,64,175,.6); }
+#ehsRoot .login-container .form-group { background: #fff; border: 1px solid #f1f5f9; border-radius: 16px; padding: 14px 16px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,.05); }
+#ehsRoot .form-group label { font-size: 11px; font-weight: 900; color: #94a3b8; letter-spacing: .04em; margin-bottom: 6px; }
+#ehsRoot input, #ehsRoot select, #ehsRoot textarea { border-radius: 12px; border: 1.5px solid #e2e8f0; background: #f8fafc; font-size: 15px; padding: 11px 12px; color: #1e293b; font-weight: 600; }
+#ehsRoot input:focus, #ehsRoot select:focus, #ehsRoot textarea:focus { border-color: #3b82f6; background: #fff; }
+#ehsRoot .btn-submit { border-radius: 16px; font-weight: 900; font-size: 16px; padding: 15px; background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); box-shadow: 0 10px 18px -10px rgba(37,99,235,.7); }
+#ehsRoot .btn-submit:hover { filter: brightness(1.06); }
+#ehsRoot .app-container { max-width: 480px; background: #f8fafc; box-shadow: none; }
+#ehsRoot header { background: #172554; padding: 18px 18px 10px; margin-bottom: -1px; }
+#ehsRoot header .btn-logout { background: rgba(255,255,255,.18); border: 0; border-radius: 10px; color: #fff; font-weight: 800; }
+#ehsRoot .tabs { background: #172554; border: 0; border-radius: 0 0 28px 28px; padding: 0 10px 6px; box-shadow: 0 10px 20px -12px rgba(15,23,42,.6); }
+#ehsRoot header, #ehsRoot .tabs { background-image: linear-gradient(135deg, #0f172a 0%, #1e40af 100%); background-attachment: local; }
+#ehsRoot .app-container > header + .tabs, #ehsRoot header { background-size: 100% 200%; }
+#ehsRoot header { background-position: 0 0; } #ehsRoot .tabs { background-position: 0 100%; }
+#ehsRoot .tab { color: rgba(255,255,255,.55); font-weight: 900; background: transparent; border-bottom: 3px solid transparent; }
+#ehsRoot .tab.active { color: #fff; background: transparent; border-bottom: 3px solid #fff; }
+#ehsRoot .page-content { padding: 18px 16px 40px; }
+#ehsRoot .defect-item { background: #fff; border: 1px solid #f1f5f9; border-radius: 16px; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+#ehsRoot .filter-badge { border-radius: 999px; font-weight: 800; }
+#ehsRoot .action-btn { border-radius: 12px; font-weight: 800; }
 
-        .page-content { padding: 20px; }
+/* ===== EHS：電腦版橫向排列 ===== */
+@media (min-width: 900px) {
+  #ehsRoot .app-container { max-width: 1180px; }
+  #ehsRoot header { padding: 20px 32px 10px; }
+  #ehsRoot .tabs { padding: 0 24px 6px; }
+  #ehsRoot .tab { font-size: 15px; padding: 14px 6px; }
+  #ehsRoot .page-content { padding: 24px 32px 48px; }
+  #ehsRoot #page1 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 20px; align-content: start; }
+  #ehsRoot #page1 > * { grid-column: 1 / -1; }
+  #ehsRoot #page1 > .form-group:nth-of-type(-n+4) { grid-column: auto; }
+  #ehsRoot #page1 > .btn-submit { max-width: 420px; justify-self: center; }
+  #ehsRoot #defectListContainer { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 14px; align-items: start; }
+  #ehsRoot #defectListContainer > * { margin: 0 !important; }
+  #ehsRoot #page3:not(.hidden) { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; align-items: stretch; }
+  #ehsRoot #page3 > * { margin-bottom: 0 !important; }
+  #ehsRoot #page3 > :first-child { grid-column: 1 / -1; }
 
-        /* 按鈕基本樣式 */
-        .btn-submit { width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .btn-submit:hover { background: var(--primary-light); }
-        .btn-logout { background: rgba(255,255,255,0.2); border: none; color: white; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+  #ehsRoot .login-container { max-width: 960px; margin: 48px auto 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 28px; align-items: start; border-radius: 0; }
+  #ehsRoot .login-container.hidden { display: none !important; }
+  #ehsRoot .login-container > img:first-child { grid-column: 1; grid-row: 1; margin: 0; width: 100% !important; border-radius: 20px; padding: 18px 22px; }
+  #ehsRoot .login-container > h2 { grid-column: 1; grid-row: 2 / span 6; margin: 14px 0 0 !important; min-height: 300px; display: flex; flex-direction: column; justify-content: flex-end; text-align: left; font-size: 30px; padding: 30px; }
+  #ehsRoot .login-container > h2::after { content: "現場缺失通報　改善追蹤　審核結案　數據統計"; display: block; font-size: 14px; font-weight: 600; opacity: .8; margin-top: 12px; letter-spacing: .05em; }
+  #ehsRoot .login-container > :not(img):not(h2) { grid-column: 2; margin-left: 0; margin-right: 0; }
+  #ehsRoot .login-container > .btn-submit { width: 100%; }
+}
 
-        /* 篩選器與清單 */
-        .filter-section { display: flex; gap: 8px; margin-bottom: 16px; overflow-x: auto; padding-bottom: 4px; }
-        .filter-badge { padding: 6px 14px; background: #e2e8f0; border-radius: 20px; font-size: 13px; font-weight: 500; cursor: pointer; white-space: nowrap; color: #475569; transition: 0.2s; }
-        .filter-badge.active { background: var(--primary); color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-
-        .list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 14px; font-weight: bold; }
-        .defect-item { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px; margin-bottom: 12px; box-shadow: var(--card-shadow); transition: 0.2s; cursor: pointer; }
-        .defect-item:hover { transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.08); }
-        .defect-header { display: flex; justify-content: space-between; align-items: center; }
-        
-        /* 標籤 Badge 樣式 */
-        .badge { padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; margin-right: 4px; }
-        .badge-category { background: #f1f5f9; color: #1e3a8a; border: 1px solid #cbd5e1; }
-        .badge.todo { background: #fef2f2; color: #ef4444; border: 1px solid #fee2e2; }
-        .badge.processing { background: #fff7ed; color: #ea580c; border: 1px solid #fed7aa; }
-        .badge.checking { background: #fffbeb; color: #d97706; border: 1px solid #fef3c7; }
-        .badge.done { background: #ecfdf5; color: #10b981; border: 1px solid #d1fae5; }
-
-        .stamp-box { font-size: 11px; color: #94a3b8; margin-top: 8px; border-top: 1px dashed #e2e8f0; padding-top: 6px; }
-
-        /* 照片比對排版 */
-        .photo-grid { display: grid; grid-template-columns: 1fr 1fr; align-items: start; gap: 12px; margin-bottom: 16px; margin-top: 10px; }
-        .photo-box { background: #f1f5f9; border-radius: 6px; padding: 8px; text-align: center; border: 1px solid #e2e8f0; overflow: hidden; }
-        .photo-box span { display: block; font-size: 12px; font-weight: bold; margin-bottom: 6px; color: #475569; }
-        .photo-box img { width: 100%; height: auto; max-height: none; object-fit: contain; border-radius: 4px; background: #cbd5e1; cursor: pointer; transition: 0.2s; }
-        .photo-box img:hover { opacity: 0.8; transform: scale(1.02); }
-
-        .action-btn { width: 100%; padding: 10px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px; transition: 0.2s; }
-        .action-btn.worker { background: #2563eb; color: white; }
-        .action-btn.approve { background: #22c55e; color: white; flex: 1; }
-        .action-btn.reject { background: #ef4444; color: white; flex: 1; }
-    </style>
+/* EHS 清單卡片：標籤不擠、不斷字 */
+#ehsRoot .defect-header { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+#ehsRoot .defect-header .badge, #ehsRoot .badge-category { white-space: nowrap; }
+#ehsRoot .defect-header > div:first-child { flex: 1 1 auto; min-width: 0; }
+#ehsRoot .dh-status { display: flex; gap: 4px; flex-shrink: 0; margin-left: auto; }
+#ehsRoot .dh-loc { margin-top: 10px; font-size: 14px; font-weight: 800; color: #334155; overflow-wrap: anywhere; }
+@media (min-width: 900px) { #ehsRoot #defectListContainer { grid-template-columns: repeat(auto-fill, minmax(460px, 1fr)); } }
+</style>
 </head>
 <body>
+<div id="portalRoot">
+<header class="top">
+  <div class="top-row">
+    <div class="brand">
+      <div class="coplate" id="logoBox"><img src="data:image/png;base64,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" alt="兆利科技工業股份有限公司 JARLLYTEC CO., LTD."></div>
+      <div class="ttl">
+        <h1 data-t="title">兆利 EHS 智慧管理平台</h1>
+        <p id="orgName"></p>
+      </div>
+    </div>
+    <div class="lang" role="group" aria-label="語言">
+      <button type="button" id="lzh" aria-pressed="true">繁中</button>
+      <button type="button" id="lth" aria-pressed="false">ไทย</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <!-- 身分識別 -->
+  <section id="signin" class="card">
+    <h2 data-t="signTitle">請先填寫身分</h2>
+    <p class="sub" data-t="signSub">進入各系統時會自動帶入你的姓名。</p>
+    <form id="signForm" novalidate>
+      <label class="f" for="nm" data-t="name">姓名</label>
+      <input type="text" id="nm" autocomplete="name" data-tp="namePh" placeholder="例如：張小明">
+      <label class="f" for="dp" data-t="dept">所屬部門</label>
+      <select id="dp"></select>
+      <label class="check"><input type="checkbox" id="rm"> <span data-t="remember">今天在這支手機記住我（個人手機才勾）</span></label>
+      <div class="err" id="err" role="alert"></div>
+      <button class="btn" type="submit" data-t="enter">進入</button>
+    </form>
+    <div class="note" data-t="signNote">此入口只用來辨識身分，不是密碼鎖。「健康檢查資料中心」含個人健康資料，進入時需要另外登入。</div>
+  </section>
+
+  <!-- 系統選單 -->
+  <section id="home" class="hidden">
+    <div class="hello">
+      <div class="who"><b id="whoName">-</b><span id="whoDept">-</span></div>
+      <button type="button" class="linkbtn" id="switchUser" data-t="switch">切換使用者</button>
+    </div>
+
+    <div class="grid">
+      <a class="tile fire" id="tFire" href="#">
+        <span class="ic" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c1 3 4 4.5 4 9a4 4 0 0 1-8 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 0-8z"/><path d="M6 21h12"/></svg></span>
+        <b data-t="fire">消防點檢</b>
+        <small data-t="fireSub">滅火器、消防栓、緩降機</small>
+        <span class="onsite"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg><span data-t="onsite">僅限現場掃碼</span></span>
+      </a>
+      <a class="tile water" id="tWater" href="#">
+        <span class="ic" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg></span>
+        <b data-t="water">飲水機點檢</b>
+        <small data-t="waterSub">月點檢、水質報告</small>
+        <span class="onsite"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg><span data-t="onsite">僅限現場掃碼</span></span>
+      </a>
+      <a class="tile ehs" id="tEhs" href="#ehs">
+        <span class="ic" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 16H3L12 3z"/><path d="M12 10v4M12 17h.01"/></svg></span>
+        <b data-t="ehs">EHS 缺失通報</b>
+        <small id="ehsSub" data-t="ehsSub">通報、改善追蹤、審核</small>
+      </a>
+      <a class="tile rec" id="tRec" href="#records">
+        <span class="ic" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M9 10h6M9 14h6M9 18h3"/></svg></span>
+        <b data-t="rec">點檢紀錄與項目</b>
+        <small data-t="recSub">本月進度、歷史紀錄、點檢項目一覽</small>
+      </a>
+
+      <a class="tile health" id="tHealth" href="#" target="_blank" rel="noopener">
+        <span class="ic" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-5 4 10 2-5h6"/></svg></span>
+        <span class="txt">
+          <b data-t="health">健康檢查資料中心</b>
+          <small data-t="healthSub">員工健檢判讀、異常追蹤與年度統計。含個人健康資料，僅限職安衛人員使用。</small>
+          <span class="lock"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span data-t="lockTag">受保護資料｜需另外登入</span></span>
+        </span>
+      </a>
+
+      <a class="tile admin hidden" id="tPaper" href="#" target="_blank" rel="noopener">
+        <span class="ic" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 9V3h10v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M7 14h10v7H7z"/><path d="M17 12h.01"/></svg></span>
+        <span class="txt">
+          <b data-t="paper">管理部｜影印紙統計系統</b>
+          <small data-t="paperSub">各部門影印／列印張數、費用分攤、月報與同期比較。</small>
+          <span class="lock"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span data-t="paperTag">管理部專用｜需用 Claude 帳號登入</span></span>
+        </span>
+      </a>
+
+      <a class="tile admin hidden" id="tMail" href="#" target="_blank" rel="noopener">
+        <span class="ic" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span>
+        <span class="txt">
+          <b data-t="mail">管理部｜掛號信簽收簿</b>
+          <small data-t="mailSub">掛號信登記、同事到管理部領取時手寫簽收、各部門統計與簽收單匯出。</small>
+          <span class="lock"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span data-t="paperTag">管理部專用｜需用 Claude 帳號登入</span></span>
+        </span>
+      </a>
+    </div>
+    <footer id="foot"></footer>
+  </section>
+</div>
+</div><!-- /portalRoot -->
+
+<div id="onsiteDlg" class="dlg hidden" role="dialog" aria-modal="true" aria-labelledby="onsiteT">
+  <div class="dlg-box">
+    <div class="dlg-ic" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v.01M14 20h.01M17 20h4v-3"/></svg></div>
+    <h3 id="onsiteT">請到現場掃描設備 QR Code</h3>
+    <p id="onsiteP" data-t="dlgP">點檢必須在設備現場進行：用手機相機掃描設備上的 QR Code，就會直接開啟該設備的點檢畫面。</p>
+    <p class="dlg-sub" data-t="dlgS">要查看點檢進度、歷史紀錄或點檢項目，請使用「點檢紀錄與項目」。</p>
+    <div class="dlg-btns">
+      <button type="button" class="dlg-go" id="onsiteGo" data-t="dlgGo">查看點檢紀錄與項目</button>
+      <button type="button" class="dlg-ok" id="onsiteOk" data-t="dlgOk">知道了</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 點檢紀錄 ===== -->
+<div id="recRoot" class="hidden">
+  <div class="rec-top">
+    <div class="row">
+      <h2>點檢紀錄與項目</h2>
+      <button type="button" class="back" id="recBack">回入口</button>
+    </div>
+    <div class="rec-tabs" role="tablist" aria-label="系統">
+      <button type="button" role="tab" id="rtFire" aria-selected="true">消防</button>
+      <button type="button" role="tab" id="rtWater" aria-selected="false">飲水機</button>
+    </div>
+  </div>
+  <div class="rec-wrap">
+    <div class="seg" role="group" aria-label="檢視">
+      <button type="button" id="rvMonth" aria-pressed="true">本月進度</button>
+      <button type="button" id="rvHist" aria-pressed="false">歷史紀錄</button>
+      <button type="button" id="rvQual" aria-pressed="false" hidden>水質報告</button>
+      <button type="button" id="rvItems" aria-pressed="false">點檢項目</button>
+    </div>
+
+    <div id="planBar" class="rec-bar" style="background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 12px">
+      <span style="font-size:14px;font-weight:700;color:var(--muted)">消防配置平面圖</span>
+      <button type="button" class="rbtn ghost" data-rpt="J1-平面圖.pdf">J1 本廠</button>
+      <button type="button" class="rbtn ghost" data-rpt="J2-平面圖.pdf">J2 二廠</button>
+      <button type="button" class="rbtn ghost" data-rpt="J3-平面圖.pdf">J3 三廠</button>
+    </div>
+
+    <div id="recItems" class="hidden"><div id="riBody"></div></div>
+
+    <div id="recQual" class="hidden">
+      <div class="rec-bar">
+        <select id="rqFactory" aria-label="廠區"></select>
+        <input type="search" id="rqQ" placeholder="搜尋設備編號、位置" aria-label="搜尋">
+        <button type="button" class="rbtn ghost" id="rqReload">重新整理</button>
+        <button type="button" class="rbtn" id="rqExport">匯出 Excel</button>
+      </div>
+      <div id="rqBody"></div>
+    </div>
+
+    <div id="recMonth">
+      <div class="rec-bar">
+        <select id="rmFactory" aria-label="廠區"></select>
+        <select id="rmFloor" aria-label="樓層"></select>
+        <select id="rmType" aria-label="設備類型"></select>
+        <select id="rmStatus" aria-label="狀態">
+          <option value="all">全部狀態</option>
+          <option value="no">未點檢</option>
+          <option value="ab">異常待改善</option>
+          <option value="ok">已點檢</option>
+        </select>
+        <label style="font-size:14px;color:var(--muted);display:flex;align-items:center;gap:6px">月份 <input type="month" id="rmMonth"></label>
+        <input type="search" id="rmQ" placeholder="搜尋設備編號、位置" aria-label="搜尋">
+        <button type="button" class="rbtn ghost" id="rmReload">重新整理</button>
+        <button type="button" class="rbtn" id="rmExport">匯出 Excel</button>
+      </div>
+      <div id="rmBody"></div>
+    </div>
+
+    <div id="recHist" class="hidden">
+      <div class="rec-bar">
+        <label style="font-size:14px;color:var(--muted)">從 <input type="date" id="rhFrom"></label>
+        <label style="font-size:14px;color:var(--muted)">到 <input type="date" id="rhTo"></label>
+        <select id="rhStatus" aria-label="結果">
+          <option value="all">全部結果</option>
+          <option value="正常">正常</option>
+          <option value="異常">異常</option>
+        </select>
+        <input type="search" id="rhQ" placeholder="搜尋設備編號、檢查員、說明" aria-label="搜尋">
+        <button type="button" class="rbtn ghost" id="rhLoad">查詢</button>
+        <button type="button" class="rbtn" id="rhExport">匯出 Excel</button>
+      </div>
+      <div id="rhBody"></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== EHS 缺失通報系統（原檔內容） ===== -->
+<div id="ehsRoot" class="hidden">
+
 
     <div id="loadingOverlay" class="hidden">
         <div class="spinner"></div>
@@ -115,7 +514,7 @@
     </div>
 
     <div id="loginSection" class="login-container">
-        <img src="https://cdn.phototourl.com/free/2026-05-12-aea1713e-4f2a-46d6-a473-93fb2a3448ba.png" alt="Company LOGO" style="max-width: 200px; max-height: 55px; object-fit: contain; margin-bottom: 16px;">
+        <img src="data:image/png;base64,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" alt="兆利科技工業股份有限公司" style="width: 260px; max-width: 100%; height: auto; object-fit: contain; margin-bottom: 16px;">
         <h2 style="margin-top: 0;">EHS 通報系統 | Pro</h2>
         <div class="form-group">
             <label>您的姓名</label>
@@ -134,6 +533,7 @@
                 <option value="研發二部">研發二部</option>
                 <option value="研發三部">研發三部</option>
                 <option value="研發四部">研發四部</option>
+                <option value="集團管理處">集團管理處</option>
                 <option value="集團人資處">集團人資處</option>
                 <option value="集團資訊處">集團資訊處</option>
                 <option value="集團財務處">集團財務處</option>
@@ -164,20 +564,21 @@
         </div>
 
         <button onclick="registerUser()" class="btn-submit">進入通報系統</button>
+        <button type="button" onclick="backToPortal()" style="margin-top:12px; background:none; border:0; color:#475569; font-size:14px; text-decoration:underline; cursor:pointer;">← 回平台首頁</button>
     </div>
 
     <div id="appSection" class="app-container hidden">
         <header>
             <div style="display: flex; align-items: center; gap: 10px;">
                 <div style="background: white; padding: 4px 8px; border-radius: 4px; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-                    <img src="https://cdn.phototourl.com/free/2026-05-12-aea1713e-4f2a-46d6-a473-93fb2a3448ba.png" alt="LOGO" style="height: 22px; max-width: 110px; object-fit: contain;">
+                    <img src="data:image/png;base64,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" alt="兆利科技" style="height: 26px; width: 26px; object-fit: contain;">
                 </div>
                 <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 1px;">
                     <span id="userDisplay" style="font-weight: bold; font-size: 14px; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">-</span> 
                     <span id="roleDisplay" style="font-size: 10px; background: rgba(255,255,255,0.2); padding: 1px 4px; border-radius: 3px;">-</span>
                 </div>
             </div>
-            <button onclick="executeLogout()" class="btn-logout">切換帳號</button>
+            <div style="display:flex; gap:6px;"><button onclick="backToPortal()" class="btn-logout">回入口</button><button onclick="executeLogout()" class="btn-logout">切換角色</button></div>
         </header>
 
         <!-- 3 個分頁導覽列 -->
@@ -417,8 +818,10 @@
         <img id="lightboxImg" style="max-width: 98%; max-height: 98%; border-radius: 4px; box-shadow: 0 4px 25px rgba(0,0,0,0.7); transition: transform 0.1s ease; object-fit: contain;">
     </div>
 
-    <!-- 引入 Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+</div><!-- /ehsRoot -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
     const POWER_AUTOMATE_SAVE_URL = "https://default5e08b912309f4900b9e179fae11d8e.2a.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/07/workflows/ae80a43b0d5e4062bf5b532833b1dad0/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=2DYPzn3BsDuCv6xsFn-pwC7wtxo1nTdakVZscqYmbMo";
@@ -762,8 +1165,8 @@
         currentUserRealName = `${inputName}(${document.getElementById('regDept').value})`;
         currentUserRole = selectedRole;
 
-        document.getElementById('loginSection').className = "hidden";
-        document.getElementById('appSection').className = "";
+        document.getElementById('loginSection').classList.add('hidden');
+        document.getElementById('appSection').classList.remove('hidden');
         document.getElementById('userDisplay').innerText = currentUserRealName;
         document.getElementById('roleDisplay').innerText = currentUserRole;
 
@@ -782,8 +1185,8 @@
     }
 
     function executeLogout() {
-        document.getElementById('appSection').className = "hidden";
-        document.getElementById('loginSection').className = "";
+        document.getElementById('appSection').classList.add('hidden');
+        document.getElementById('loginSection').classList.remove('hidden');
         document.getElementById('regEmpId').value = "";
     }
 
@@ -1046,14 +1449,14 @@ function loadOneDriveImage(imgElementId, fileName) {
                         <span class="badge" style="${factoryStyle}">${item.factory}</span>
                         <span class="badge" style="${floorStyle}">${item.floor}</span>
                         <span class="badge badge-category">🏷️ ${item.category || "其他"}</span>
-                        <span style="font-size:13px; color:#475569; font-weight:bold; margin-left:4px;">📍 ${item.location}</span>
                     </div>
-                    <div>
+                    <div class="dh-status">
                         ${isOverdue ? '<span class="badge" style="background:#fee2e2; color:#ef4444; border:1px solid #fca5a5;">⚠️ 逾期未結</span>' : ''}
                         <span class="badge ${statusBadgeClass}">${item.status}</span>
                     </div>
                 </div>
-                <div style="margin-top:8px; font-size:13px; color:#334155; line-height:1.4;">
+                <div class="dh-loc">📍 ${item.location}</div>
+                <div style="margin-top:6px; font-size:13px; color:#334155; line-height:1.5;">
                     ${item.description}
                 </div>
                 <div class="stamp-box">
@@ -1230,19 +1633,15 @@ function loadOneDriveImage(imgElementId, fileName) {
             return;
         }
         
-        let dates = targetData
-            .map(item => item.reportTime)
-            .filter(t => t && t !== '-' && t.length >= 7);
-            
-        if (dates.length > 0) {
-            dates.sort();
-            let earliest = dates[0].substring(0, 7).replace('/', '年') + '月';
-            let latest = dates[dates.length - 1].substring(0, 7).replace('/', '年') + '月';
-            let prefix = currentChartFilter === 'MONTH' ? '📅 當月區間：' : (currentChartFilter === 'YEAR' ? '📈 本年度區間：' : '📅 統計區間：');
-            document.getElementById('chartDateRange').innerText = `${prefix}${earliest} ～ ${latest}`;
-        } else {
-            document.getElementById('chartDateRange').innerText = "📅 統計區間：無有效時間數據";
-        }
+        const toD = t => { const m = String(t || '').match(/(\d{4})[\/\-.](\d{1,2})[\/\-.](\d{1,2})/); return m ? new Date(+m[1], +m[2] - 1, +m[3]) : null; };
+        const fmt = d => `${d.getFullYear()}/${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getDate()).padStart(2, '0')}`;
+        const ds = targetData.map(item => toD(item.reportTime)).filter(Boolean).sort((x, y) => x - y);
+        const now = new Date(), el = document.getElementById('chartDateRange');
+        const span = ds.length ? `｜共 ${targetData.length} 筆，最早 ${fmt(ds[0])}、最新 ${fmt(ds[ds.length - 1])}` : '';
+        if (currentChartFilter === 'YEAR') el.innerText = `📈 本年度：${now.getFullYear()}/01/01 ～ ${fmt(now)}${span}`;
+        else if (currentChartFilter === 'MONTH') el.innerText = `📅 本月：${fmt(new Date(now.getFullYear(), now.getMonth(), 1))} ～ ${fmt(now)}${span}`;
+        else if (ds.length) el.innerText = `📅 全部資料：${fmt(ds[0])} ～ ${fmt(ds[ds.length - 1])}｜共 ${targetData.length} 筆`;
+        else el.innerText = "📅 統計區間：無有效時間數據";
     }
 
     function renderCategoryPieChart() {
@@ -1451,7 +1850,793 @@ function loadOneDriveImage(imgElementId, fileName) {
     // 初始化載入預設廠區樓層選項
     window.onload = function() {
         updateFloorOptions();
+        // 從「職安衛入口」帶入姓名與部門（入口頁與本頁需在同一個網站）
+        try {
+            const u = JSON.parse(localStorage.getItem('ehs_portal_user') || sessionStorage.getItem('ehs_portal_user') || 'null');
+            if (u && u.name) {
+                document.getElementById('regName').value = u.name;
+                const dept = document.getElementById('regDept');
+                if (u.dept && Array.from(dept.options).some(o => o.value === u.dept)) dept.value = u.dept;
+            }
+        } catch (e) {}
     };
     </script>
+
+<script>
+(function () {
+  var T = {
+    zh: {
+      title: "兆利 EHS 智慧管理平台", signTitle: "請先填寫身分", signSub: "進入各系統時會自動帶入你的姓名。",
+      name: "姓名", namePh: "例如：張小明", dept: "所屬部門", remember: "今天在這支手機記住我（個人手機才勾）", enter: "進入",
+      signNote: "此入口只用來辨識身分，不是密碼鎖。「健康檢查資料中心」含個人健康資料，進入時需要另外登入。",
+      switch: "切換使用者", fire: "消防點檢", fireSub: "滅火器、消防栓、緩降機", onsite: "僅限現場掃碼",
+      dlgT: "請到現場掃描 QR Code", dlgP: "點檢必須在設備現場進行：用手機相機掃描設備上的 QR Code，就會直接開啟該設備的點檢畫面。",
+      dlgS: "要查看點檢進度、歷史紀錄或點檢項目，請使用「點檢紀錄與項目」。", dlgGo: "查看點檢紀錄與項目", dlgOk: "知道了",
+      water: "飲水機點檢", waterSub: "月點檢、水質報告", ehs: "EHS 缺失通報", ehsSub: "通報、改善追蹤、審核",
+      ehsOff: "尚未設定網址", health: "健康檢查資料中心", rec: "點檢紀錄與項目", recSub: "本月進度、歷史紀錄、點檢項目一覽", items: "點檢項目一覽", itemsSub: "消防、飲水機各設備要檢查哪些項目，可匯出給稽核",
+      healthSub: "員工健檢判讀、異常追蹤與年度統計。含個人健康資料，僅限職安衛人員使用。", lockTag: "受保護資料｜需另外登入",
+      paper: "管理部｜影印紙統計系統", paperSub: "各部門影印／列印張數、費用分攤、月報與同期比較。", paperTag: "管理部專用｜需用 Claude 帳號登入",
+      mail: "管理部｜掛號信簽收簿", mailSub: "掛號信登記、同事到管理部領取時手寫簽收、各部門統計與簽收單匯出。",
+      needName: "請填寫姓名", hi: "你好，"
+    },
+    th: {
+      title: "แพลตฟอร์มบริหาร EHS อัจฉริยะ", signTitle: "กรุณากรอกข้อมูลของคุณ", signSub: "ระบบจะใส่ชื่อของคุณให้อัตโนมัติเมื่อเข้าแต่ละระบบ",
+      name: "ชื่อ", namePh: "ชื่อของคุณ", dept: "แผนก", remember: "จดจำฉันวันนี้ (เฉพาะโทรศัพท์ส่วนตัว)", enter: "เข้าสู่ระบบ",
+      signNote: "หน้านี้ใช้ระบุตัวตนเท่านั้น ไม่ใช่รหัสผ่าน ระบบตรวจสุขภาพต้องเข้าสู่ระบบแยกต่างหาก",
+      switch: "เปลี่ยนผู้ใช้", onsite: "สแกนที่หน้างานเท่านั้น",
+      dlgT: "กรุณาสแกน QR Code ที่หน้างาน", dlgP: "การตรวจต้องทำที่ตัวอุปกรณ์: ใช้กล้องโทรศัพท์สแกน QR Code บนอุปกรณ์ ระบบจะเปิดหน้าตรวจของอุปกรณ์นั้นทันที",
+      dlgS: "หากต้องการดูความคืบหน้า ประวัติ หรือรายการตรวจ กรุณาใช้เมนู「บันทึกการตรวจ」", dlgGo: "ดูบันทึกและรายการตรวจ", dlgOk: "รับทราบ",
+      fire: "ตรวจอุปกรณ์ดับเพลิง", fireSub: "ถังดับเพลิง ตู้ดับเพลิง",
+      water: "ตรวจตู้กดน้ำ", waterSub: "ตรวจรายเดือน รายงานคุณภาพน้ำ", ehs: "แจ้งข้อบกพร่อง EHS", ehsSub: "แจ้ง ติดตาม อนุมัติ",
+      ehsOff: "ยังไม่ได้ตั้งค่า", health: "ระบบตรวจสุขภาพ", rec: "บันทึกการตรวจ", recSub: "ความคืบหน้าและประวัติ", items: "รายการตรวจ", itemsSub: "รายการที่ต้องตรวจของแต่ละอุปกรณ์",
+      healthSub: "ข้อมูลสุขภาพพนักงาน เฉพาะเจ้าหน้าที่ความปลอดภัย", lockTag: "ข้อมูลคุ้มครอง｜เข้าสู่ระบบแยก",
+      paper: "ฝ่ายบริหาร｜สถิติกระดาษถ่ายเอกสาร", paperSub: "จำนวนการถ่ายเอกสาร/พิมพ์ของแต่ละแผนก ค่าใช้จ่าย และรายงานรายเดือน", paperTag: "เฉพาะฝ่ายบริหาร｜เข้าสู่ระบบด้วยบัญชี Claude",
+      mail: "ฝ่ายบริหาร｜สมุดรับจดหมายลงทะเบียน", mailSub: "บันทึกจดหมายลงทะเบียน เซ็นรับที่ฝ่ายบริหาร สถิติแต่ละแผนก",
+      needName: "กรุณาใส่ชื่อ", hi: ""
+    }
+  };
+  var KEY = "ehs_portal_user", LKEY = "ehs_portal_lang";
+  var lang = "zh", user = null;
+
+  function store(k, v) { try { if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) {} }
+  function load(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function $(id) { return document.getElementById(id); }
+
+  /* header & config */
+  $("orgName").textContent = CONFIG.orgName;
+  if (CONFIG.logoUrl) {
+    var img = new Image(); img.alt = ""; img.src = CONFIG.logoUrl;
+    img.onload = function () { $("logoBox").textContent = ""; $("logoBox").appendChild(img); };
+  }
+  CONFIG.depts.forEach(function (d) { var o = document.createElement("option"); o.value = o.textContent = d; $("dp").appendChild(o); });
+
+  function setLang(l) {
+    lang = T[l] ? l : "zh"; store(LKEY, lang);
+    document.documentElement.lang = lang === "th" ? "th" : "zh-Hant";
+    $("lzh").setAttribute("aria-pressed", String(lang === "zh"));
+    $("lth").setAttribute("aria-pressed", String(lang === "th"));
+    document.querySelectorAll("[data-t]").forEach(function (el) { var v = T[lang][el.getAttribute("data-t")]; if (v) el.textContent = v; });
+    document.querySelectorAll("[data-tp]").forEach(function (el) { el.placeholder = T[lang][el.getAttribute("data-tp")]; });
+    paintLinks();
+  }
+
+  function withId(url) { return url; }
+  function paintLinks() {
+    $("tFire").href = "#onsite"; $("tWater").href = "#onsite";
+    $("tHealth").href = CONFIG.links.health;
+    if (CONFIG.links.paper) $("tPaper").href = CONFIG.links.paper;
+    if (CONFIG.links.mail) $("tMail").href = CONFIG.links.mail;
+  }
+
+  function show(u) {
+    user = u;
+    if (!u) { $("home").classList.add("hidden"); $("signin").classList.remove("hidden"); return; }
+    /* 讓消防、飲水機點檢頁自動帶入點檢人姓名（同一個網站才有效） */
+    store("inspector", u.name); store("wd_inspector", u.name);
+    $("whoName").textContent = (T[lang].hi || "") + u.name;
+    $("whoDept").textContent = u.dept;
+    /* 管理部專區：只有 CONFIG.adminDepts 裡的部門看得到 */
+    $("tPaper").classList.toggle("hidden", !(CONFIG.links.paper && (CONFIG.adminDepts || []).indexOf(u.dept) >= 0));
+    $("tMail").classList.toggle("hidden", !(CONFIG.links.mail && (CONFIG.adminDepts || []).indexOf(u.dept) >= 0));
+    $("foot").textContent = "© " + CONFIG.company + " " + CONFIG.orgName;
+    $("signin").classList.add("hidden"); $("home").classList.remove("hidden");
+  }
+
+  $("signForm").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var name = $("nm").value.trim();
+    if (!name) { $("err").textContent = T[lang].needName; $("nm").focus(); return; }
+    $("err").textContent = "";
+    var u = { name: name, dept: $("dp").value };
+    /* 勾選記住：只到今天午夜為止；沒勾：只在這個分頁有效，關掉分頁就要重填 */
+    var eod = new Date(); eod.setHours(23, 59, 59, 999);
+    store(KEY, $("rm").checked ? JSON.stringify(Object.assign({ exp: eod.getTime() }, u)) : null);
+    try { sessionStorage.setItem(KEY, JSON.stringify(u)); } catch (e) {}
+    show(u);
+  });
+  function openEhs() {
+    if (!user) return;
+    $("portalRoot").classList.add("hidden"); $("ehsRoot").classList.remove("hidden");
+    if ($("appSection").classList.contains("hidden")) {
+      $("regName").value = user.name;
+      var d = $("regDept"); if (Array.prototype.some.call(d.options, function (o) { return o.value === user.dept; })) d.value = user.dept;
+    }
+    window.scrollTo(0, 0);
+  }
+  window.backToPortal = function () {
+    $("ehsRoot").classList.add("hidden"); $("portalRoot").classList.remove("hidden");
+    if (location.hash === "#ehs") history.replaceState(null, "", location.pathname + location.search);
+    window.scrollTo(0, 0);
+  };
+  $("tEhs").addEventListener("click", function (ev) { ev.preventDefault(); openEhs(); });
+  function onsite(ev, name) {
+    ev.preventDefault();
+    $("onsiteT").textContent = lang === "th" ? name + "：" + T.th.dlgT : name + T.zh.dlgT;
+    $("onsiteDlg").classList.remove("hidden"); $("onsiteGo").focus();
+  }
+  $("tFire").addEventListener("click", function (ev) { onsite(ev, T[lang].fire); });
+  $("tWater").addEventListener("click", function (ev) { onsite(ev, T[lang].water); });
+  $("onsiteOk").addEventListener("click", function () { $("onsiteDlg").classList.add("hidden"); });
+  $("onsiteDlg").addEventListener("click", function (ev) { if (ev.target === $("onsiteDlg")) $("onsiteDlg").classList.add("hidden"); });
+  $("onsiteGo").addEventListener("click", function () { $("onsiteDlg").classList.add("hidden"); if (user) window.openRecords(); });
+  document.addEventListener("keydown", function (ev) { if (ev.key === "Escape") $("onsiteDlg").classList.add("hidden"); });
+  $("tRec").addEventListener("click", function (ev) { ev.preventDefault(); if (user) window.openRecords(); });
+
+  $("switchUser").addEventListener("click", function () {
+    try { executeLogout(); } catch (e) {}
+    store(KEY, null); try { sessionStorage.removeItem(KEY); } catch (e) {} $("nm").value = ""; show(null); $("nm").focus();
+  });
+  $("lzh").addEventListener("click", function () { setLang("zh"); if (user) show(user); });
+  $("lth").addEventListener("click", function () { setLang("th"); if (user) show(user); });
+
+  setLang(load(LKEY) || "zh");
+  var saved = null;
+  try {
+    saved = JSON.parse(sessionStorage.getItem(KEY) || "null");
+    if (!saved) { var ls = JSON.parse(load(KEY) || "null"); if (ls && ls.exp && ls.exp > Date.now()) saved = ls; else store(KEY, null); }
+  } catch (e) { saved = null; }
+  if (saved && saved.name) { $("nm").value = saved.name; $("dp").value = saved.dept; show(saved); }
+})();
+</script>
+<script>
+/* ===== 點檢紀錄（讀取消防、飲水機的 Power Automate 資料） ===== */
+(function () {
+  var SRC = {
+    fire: {
+      name: "消防",
+      readApi: "https://default5e08b912309f4900b9e179fae11d8e.2a.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/936bca953b404ce3b51409647874490d/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=5Zexelu5ljymRba54JEjA6o7kITqo5QIb2baBR8QvPA",
+      historyApi: "https://default5e08b912309f4900b9e179fae11d8e.2a.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/28/workflows/4dac9654dae245ef83721b341e170e6a/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=OmfleYVotduxdEfru1g410or53iNnmQ5toLinTrrtz4",   // ← 歷史紀錄讀取流程建好後，把網址貼在這裡
+      types: { DCP: "乾粉滅火器", CO2: "二氧化碳滅火器", FH: "消防栓", EP: "緩降機" }
+    },
+    water: {
+      name: "飲水機",
+      readApi: "https://default5e08b912309f4900b9e179fae11d8e.2a.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/2df80d493fc4495ea6adf73ad0e31595/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=vhkAk7R7RCFqWsLgtwaCsbJwulc5XIrtM0lOUToabTM",
+      historyApi: "https://default5e08b912309f4900b9e179fae11d8e.2a.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/24/workflows/f230b79f9d124a778577317a4ed01c38/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BOssxdArftUCZw8piotzu3mYsaRsH_1G_z1_PffiuB4",   // ← 歷史紀錄讀取流程建好後，把網址貼在這裡
+      types: { WD: "飲水機" },
+      downloadApi: "https://default5e08b912309f4900b9e179fae11d8e.2a.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/92b8d989449d4f70983d1365e3c4c3d8/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=xnVNjU5EcnH8a9uu2_zYO7cvQGJe2mNh7rupl-2mvwQ"
+    }
+  };
+  /* OneDrive 檔案下載中轉（消防平面圖、水質報告共用，與點檢頁相同） */
+  var DOWNLOAD_API = "https://default5e08b912309f4900b9e179fae11d8e.2a.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/92b8d989449d4f70983d1365e3c4c3d8/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=xnVNjU5EcnH8a9uu2_zYO7cvQGJe2mNh7rupl-2mvwQ";
+  var FACT = { J1: "本廠 J1", J2: "二廠 J2", J3: "三廠 J3", DORM: "宿舍", KD: "KD大樓" };
+  var S = { sys: "fire", view: "month", month: {}, hist: {}, limit: 200 };
+
+  function $(id) { return document.getElementById(id); }
+  function el(tag, attrs, kids) {
+    var e = document.createElement(tag);
+    if (attrs) Object.keys(attrs).forEach(function (k) { if (k === "text") e.textContent = attrs[k]; else e.setAttribute(k, attrs[k]); });
+    (kids || []).forEach(function (c) { if (c != null) e.appendChild(typeof c === "string" ? document.createTextNode(c) : c); });
+    return e;
+  }
+  function pick(o, keys) {
+    if (!o || typeof o !== "object") return "";
+    for (var i = 0; i < keys.length; i++) {
+      var k = keys[i];
+      if (o[k] != null && String(o[k]).trim() !== "") return String(o[k]).trim();
+      if (o[k + " "] != null && String(o[k + " "]).trim() !== "") return String(o[k + " "]).trim();
+    }
+    return "";
+  }
+  function excelDate(v) {
+    if (v == null || v === "") return "";
+    var s = String(v).trim();
+    if (/^\d+(\.\d+)?$/.test(s) && +s > 30000 && +s < 80000) {
+      var d = new Date(Math.round((+s - 25569) * 86400000));
+      var p = function (n) { return String(n).padStart(2, "0"); };
+      var t = d.getUTCFullYear() + "/" + p(d.getUTCMonth() + 1) + "/" + p(d.getUTCDate());
+      if (+s % 1) t += " " + p(d.getUTCHours()) + ":" + p(d.getUTCMinutes());
+      return t;
+    }
+    return s.replace("T", " ").replace(/(\.\d+)?Z$/, "").replace(/(\d{2}:\d{2}):00$/, "$1").replace(/-/g, "/");
+  }
+  function toDate(v) {
+    var s = excelDate(v); if (!s) return null;
+    var m = s.match(/(\d{4})\/(\d{1,2})\/(\d{1,2})(?:\D+(\d{1,2}):(\d{2}))?/);
+    if (m) {
+      var hh = +(m[4] || 0);
+      if (/PM|下午/i.test(s) && hh < 12) hh += 12;
+      if (/AM|上午/i.test(s) && hh === 12) hh = 0;
+      return new Date(+m[1], +m[2] - 1, +m[3], hh, +(m[5] || 0));
+    }
+    var d = new Date(s); return isNaN(d) ? null : d;
+  }
+  function asList(x) {
+    if (x == null) return [];
+    if (typeof x === "string") { try { x = JSON.parse(x); } catch (e) { return x.split(/[,\s]+/).filter(Boolean); } }
+    if (Array.isArray(x)) return x;
+    if (x.value && Array.isArray(x.value)) return x.value;
+    return [x];
+  }
+  async function postJson(url, body) {
+    var ctrl = new AbortController(), timer = setTimeout(function () { ctrl.abort(); }, 30000);
+    try {
+      var res = await fetch(url, { method: "POST", body: body, signal: ctrl.signal });
+      var text = await res.text();
+      if (!res.ok) throw new Error("伺服器回應 " + res.status + (text ? "：" + text.slice(0, 120) : ""));
+      try { return JSON.parse(text); } catch (e) { throw new Error("收到的不是 JSON 資料：" + text.slice(0, 80)); }
+    } catch (e) {
+      if (e.name === "AbortError") throw new Error("等候超過 30 秒，Excel 可能被鎖定或流程太慢");
+      if (e instanceof TypeError) throw new Error("連不到 Power Automate（" + e.message + "）");
+      throw e;
+    } finally { clearTimeout(timer); }
+  }
+  function idOf(o) { return (typeof o === "string" ? o : pick(o, ["設備編號", "equipmentId", "EquipmentId", "ID", "id"])).toUpperCase().trim(); }
+  /* 樓層：先看 Excel 的「樓層」欄，沒有就從位置文字裡找（2F、2樓、B1、地下1樓、RF） */
+  function floorFromId(id) {
+    var segs = String(id || "").toUpperCase().split("-");
+    for (var i = 1; i < segs.length; i++) { var m = segs[i].match(/^(B?)(\d{1,2})F$/); if (m) return (m[1] ? "B" : "") + (+m[2]) + "F"; if (segs[i] === "RF") return "RF"; }
+    return "";
+  }
+  function floorOf(d, loc, id) {
+    var f = pick(d, ["樓層", "樓別", "樓", "Floor", "floor"]);
+    if (!f) { var fi = floorFromId(id || idOf(d)); if (fi) return fi; }
+    var src = f || loc || "", m;
+    if ((m = src.match(/(?:地下|B)\s*(\d{1,2})\s*(?:F|樓|層)?/i))) return "B" + (+m[1]) + "F";
+    if ((m = src.match(/(?:^|[^A-Za-z0-9])(\d{1,2})\s*(?:F|樓|層)(?![A-Za-z])/i)) || (m = src.match(/^(\d{1,2})F/i))) return (+m[1]) + "F";
+    if (/R\s*F|屋頂|頂樓/i.test(src)) return "RF";
+    if (f && /^\d{1,2}$/.test(f.trim())) return (+f) + "F";
+    return f || "";
+  }
+  function whoOf(o, keys) {
+    var v = pick(o, keys); if (v) return v;
+    for (var k in o) if (/檢查員|檢查人|點檢人/.test(k) && o[k] != null && String(o[k]).trim()) return String(o[k]).trim();
+    return "";
+  }
+  function locOf(o) {
+    var keys = ["正確位置", "廠區位置", "位置", "設置位置", "放置位置", "location", "Location"], codeOnly = /^(J\d+|DORM|KD)$/i, fallback = "";
+    for (var i = 0; i < keys.length; i++) {
+      var v = pick(o, [keys[i]]); if (!v) continue;
+      if (codeOnly.test(v)) { fallback = fallback || v; continue; }
+      return v;
+    }
+    for (var k in o) if (/位置/.test(k) && o[k] != null && String(o[k]).trim() && !codeOnly.test(String(o[k]).trim())) return String(o[k]).trim();
+    return fallback;
+  }
+  function floorRank(f) { if (!f) return 999; if (f === "RF") return 900; var m = f.match(/^B(\d+)F$/); if (m) return -m[1]; m = f.match(/^(\d+)F$/); return m ? +m[1] : 800; }
+  function factoryOf(id) { var p = id.split("-")[0].toUpperCase(); return FACT[p] ? p : (/^KD/.test(p) ? "KD" : /^DORM/.test(p) ? "DORM" : "其他"); }
+  function typeOf(sys, id) { var t = Object.keys(SRC[sys].types); for (var i = 0; i < t.length; i++) if (id.indexOf(t[i]) >= 0) return t[i]; return "其他"; }
+
+  /* ---------- 本月進度 ---------- */
+  async function loadMonth(force) {
+    var sys = S.sys, box = S.view === "qual" ? $("rqBody") : $("rmBody");
+    if (S.month[sys] && !force) { renderMonth(); return; }
+    box.textContent = ""; box.appendChild(el("div", { class: "rec-msg", text: "讀取" + SRC[sys].name + "資料中…" }));
+    try {
+      var data = await postJson(SRC[sys].readApi, "{}");
+      S.diag = S.diag || {};
+      S.diag[sys] = (function () {
+        var keys = Array.isArray(data) ? "（整包是陣列，" + data.length + " 筆）" : Object.keys(data || {}).map(function (k) {
+          var v = data[k], n = Array.isArray(v) ? v.length + " 筆" : typeof v === "string" ? "文字 " + v.length + " 字" : typeof v;
+          return k + "（" + n + "）";
+        }).join("、");
+        var dl = asList(data.deviceDetails || data.value || data.devices || (Array.isArray(data) ? data : []));
+        var first = dl[0] && typeof dl[0] === "object" ? Object.keys(dl[0]).map(function (k) { return "「" + k + "」"; }).join("") : String(dl[0] || "（沒有）");
+        var done0 = asList(data.doneList)[0];
+        return "回應欄位：" + keys + "\n設備清單第一筆的欄位：" + first + "\ndoneList 第一筆：" + (done0 == null ? "（沒有）" : JSON.stringify(done0).slice(0, 120));
+      })();
+      var devices = asList(data.deviceDetails || data.value || data.devices || (Array.isArray(data) ? data : []));
+      if (!devices.length) devices = asList(data.deviceLocation).filter(function (o) { return o && typeof o === "object"; });
+      if (!devices.length) throw new Error("連上了，但沒有收到設備清單。收到的欄位：" + (Array.isArray(data) ? "（陣列，0 筆）" : Object.keys(data || {}).join("、") || "（空的）"));
+      var doneRaw = asList(data.doneList), doneSet = {}, doneStr = JSON.stringify(data.doneList || "").toUpperCase();
+      doneRaw.forEach(function (d) { var i = idOf(d); if (i) doneSet[i] = d; });
+      var openAb = {}, fixedAb = {};
+      asList(data.errorList).forEach(function (e) {
+        var i = idOf(e); if (!i) return;
+        var fixed = pick(e, ["完成改善日期"]);
+        if (!fixed || fixed === "undefined" || fixed === "null") openAb[i] = pick(e, ["異常項目", "損壞備註", "備註"]) || "異常";
+        else fixedAb[i] = 1;
+      });
+      var locMap = {};
+      [data.deviceLocation, data.locationList, data.deviceDetails].forEach(function (src) {
+        asList(src).forEach(function (o) { if (o && typeof o === "object") { var i = idOf(o), l = locOf(o); if (i && l && !locMap[i]) locMap[i] = l; } });
+      });
+      var exp = {};
+      asList(data.warningList).forEach(function (w) { var i = idOf(w); if (i) exp[i] = pick(w, ["效期", "有效期限"]); });
+      var noId = devices.filter(function (d) { return !idOf(d); }).length;
+      if (noId === devices.length) throw new Error("有收到 " + devices.length + " 筆設備，但找不到「設備編號」欄位");
+      var rows = devices.map(function (d) {
+        var id = idOf(d); if (!id) return null;
+        var done = !!doneSet[id] || (doneStr.indexOf('"' + id + '"') >= 0) || (doneStr.indexOf(id) >= 0 && !doneRaw.length) || !!fixedAb[id];
+        var dd = doneSet[id] && typeof doneSet[id] === "object" ? doneSet[id] : null;
+        var st = openAb[id] ? "ab" : done ? "ok" : "no";
+        return {
+          id: id, f: factoryOf(id), t: typeOf(sys, id),
+          loc: locOf(d) || locMap[id] || "",
+          fl: floorOf(d, locOf(d) || locMap[id] || "", id),
+          test: excelDate(pick(d, ["最新檢測狀態", "最新檢測日期", "檢測日期"])),
+          rptZh: pick(d, ["最新報告網址"]), rptTh: pick(d, ["最新報告網址_泰文"]),
+          exp: excelDate(pick(d, ["效期", "有效期限"]) || exp[id] || ""),
+          st: st, ab: openAb[id] || "",
+          who: dd ? whoOf(dd, ["檢查員", "檢查人員", "檢查人", "點檢人", "點檢人員", "點檢執行人", "inspector", "Inspector"]) : "",
+          when: dd ? excelDate(pick(dd, ["點檢時間", "點檢日期", "檢查時間", "檢查日期", "timestamp", "Timestamp", "時間", "日期"])) : ""
+        };
+      }).filter(Boolean);
+      var hasDone = !Array.isArray(data) && data && ("doneList" in data || "errorList" in data);
+      S.month[sys] = { rows: rows, at: new Date(), hasDone: hasDone };
+      fillMonthFilters(); renderMonth(); if (S.view === "qual") renderQual();
+      fillWhoFromHistory(sys);
+    } catch (err) {
+      box.textContent = "";
+      box.appendChild(el("div", { class: "rec-msg err", text: "讀不到" + SRC[sys].name + "資料（" + (err.message || err) + "）。請確認網路，或 Power Automate 流程是否正常。" }));
+      if (S.diag && S.diag[sys]) box.appendChild(diagBox(sys));
+    }
+  }
+  function diagBox(sys) {
+    var d = el("details", { style: "margin-top:10px;font-size:13px;color:var(--muted)" }, [
+      el("summary", { style: "cursor:pointer", text: "資料檢查（截圖這段給我可以幫你查原因）" }),
+      el("pre", { style: "white-space:pre-wrap;word-break:break-all;background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px;margin:8px 0 0;font-size:12.5px", text: (S.diag && S.diag[sys]) || "尚未讀取" })
+    ]);
+    return d;
+  }
+  /* ---------- 月份：本月用即時資料，其他月份從流水帳算 ---------- */
+  function curYM() { var d = new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0"); }
+  function selYM() { return $("rmMonth").value || curYM(); }
+  function ymLabel(ym) { var p = ym.split("-"); return p[0] + " 年 " + (+p[1]) + " 月"; }
+  async function ensureHist(sys) {
+    if (S.hist[sys] || !SRC[sys].historyApi) return;
+    if (S.histLoading && S.histLoading[sys]) return S.histLoading[sys];
+    S.histLoading = S.histLoading || {};
+    S.histLoading[sys] = (async function () {
+      var data = await postJson(SRC[sys].historyApi, "{}");
+      var list = asList(Array.isArray(data) ? data : (data.value || data.rows || data.data || []));
+      S.hist[sys] = { rows: list.map(histRow).filter(function (r) { return r.id; }), at: new Date() };
+    })();
+    try { await S.histLoading[sys]; } finally { S.histLoading[sys] = null; }
+  }
+  function viewRows() {
+    var M = S.month[S.sys]; if (!M) return null;
+    var ym = selYM(); if (ym === curYM() && M.hasDone) return M.rows;
+    var H = S.hist[S.sys]; if (!H) return null;
+    var y = +ym.split("-")[0], mo = +ym.split("-")[1] - 1, last = {};
+    H.rows.forEach(function (h) {
+      if (!h.d || h.d.getFullYear() !== y || h.d.getMonth() !== mo) return;
+      if (!last[h.id] || h.d > last[h.id].d) last[h.id] = h;
+    });
+    var seen = {}, out = M.rows.map(function (r) {
+      seen[r.id] = 1; var h = last[r.id];
+      var c = Object.assign({}, r, { st: "no", who: "", when: "", ab: "" });
+      if (h) { c.st = h.st.indexOf("異常") >= 0 ? "ab" : "ok"; c.who = h.who; c.when = h.when; c.ab = c.st === "ab" ? (h.reason || "異常") : ""; }
+      return c;
+    });
+    Object.keys(last).forEach(function (id) {
+      if (seen[id]) return; var h = last[id];
+      out.push({ id: id, f: factoryOf(id), t: typeOf(S.sys, id), loc: h.loc || "", fl: floorOf({}, h.loc || "", id), st: h.st.indexOf("異常") >= 0 ? "ab" : "ok", who: h.who, when: h.when, ab: h.st.indexOf("異常") >= 0 ? (h.reason || "異常") : "", exp: "", test: "" });
+    });
+    return out;
+  }
+
+  /* doneList 沒有點檢人時，用歷史紀錄流程（流水帳）補上本月誰點檢 */
+  async function fillWhoFromHistory(sys) {
+    var M = S.month[sys]; if (!M || !SRC[sys].historyApi) return;
+    if (!M.rows.some(function (r) { return r.st !== "no" && !r.who; })) return;
+    try {
+      await ensureHist(sys);
+      var now = new Date(), last = {};
+      S.hist[sys].rows.forEach(function (h) {
+        if (!h.d || h.d.getFullYear() !== now.getFullYear() || h.d.getMonth() !== now.getMonth()) return;
+        if (!last[h.id] || h.d > last[h.id].d) last[h.id] = h;
+      });
+      M.rows.forEach(function (r) {
+        var h = last[r.id]; if (!h) return;
+        if (!r.who) r.who = h.who; if (!r.when) r.when = h.when;
+        if (r.st === "no") r.st = h.st.indexOf("異常") >= 0 ? "ab" : "ok";
+      });
+      if (S.sys === sys) renderMonth();
+    } catch (e) { /* 補不到就維持原樣 */ }
+  }
+  function fillMonthFilters() {
+    var rows = viewRows() || (S.month[S.sys] || {}).rows || [];
+    var fs = {}, ts = {}, ls = {};
+    rows.forEach(function (r) { fs[r.f] = 1; ts[r.t] = 1; if (r.fl) ls[r.fl] = 1; });
+    var fl = $("rmFloor"), flv = fl.value;
+    fl.textContent = ""; fl.appendChild(el("option", { value: "all", text: "全部樓層" }));
+    Object.keys(ls).sort(function (a, b) { return floorRank(a) - floorRank(b); }).forEach(function (k) { fl.appendChild(el("option", { value: k, text: k })); });
+    if (rows.some(function (r) { return !r.fl; }) && Object.keys(ls).length) fl.appendChild(el("option", { value: "none", text: "未註記樓層" }));
+    if (ls[flv] || flv === "none") fl.value = flv;
+    fl.hidden = !Object.keys(ls).length;
+    var f = $("rmFactory"), t = $("rmType"), fv = f.value, tv = t.value;
+    f.textContent = ""; t.textContent = "";
+    f.appendChild(el("option", { value: "all", text: "全部廠區" }));
+    Object.keys(fs).sort().forEach(function (k) { f.appendChild(el("option", { value: k, text: FACT[k] || k })); });
+    t.appendChild(el("option", { value: "all", text: "全部類型" }));
+    Object.keys(ts).forEach(function (k) { t.appendChild(el("option", { value: k, text: SRC[S.sys].types[k] || k })); });
+    if (fs[fv]) f.value = fv; if (ts[tv]) t.value = tv;
+    t.hidden = Object.keys(ts).length < 2;
+  }
+  function monthFiltered() {
+    var fl = $("rmFloor").value;
+    var rows = viewRows() || [], f = $("rmFactory").value, t = $("rmType").value, s = $("rmStatus").value, q = $("rmQ").value.trim().toUpperCase();
+    return rows.filter(function (r) {
+      if (f && f !== "all" && r.f !== f) return false;
+      if (t && t !== "all" && r.t !== t) return false;
+      if (fl && fl !== "all" && (fl === "none" ? r.fl : r.fl !== fl)) return false;
+      if (s !== "all" && r.st !== s) return false;
+      if (q && (r.id + " " + r.loc).toUpperCase().indexOf(q) < 0) return false;
+      return true;
+    }).sort(function (a, b) { var o = { no: 0, ab: 1, ok: 2 }; return o[a.st] - o[b.st] || a.id.localeCompare(b.id); });
+  }
+  var STN = { ok: "已點檢", no: "未點檢", ab: "異常待改善" };
+  function renderMonth() {
+    var box = $("rmBody"), M = S.month[S.sys]; if (!M) return;
+    var ym = selYM(), isCur = ym === curYM(), sys0 = S.sys, fromLog = !isCur || !M.hasDone;
+    if (fromLog && !S.hist[sys0]) {
+      box.textContent = "";
+      if (!SRC[sys0].historyApi) {
+        box.appendChild(el("div", { class: "rec-msg" }, isCur ? [
+          el("b", { text: SRC[sys0].name + "的讀取網址只回傳設備清單（" + M.rows.length + " 台），沒有本月點檢紀錄。" }),
+          el("div", { text: "所以這裡無法判斷誰點過。接上「讀取點檢流水帳」流程，把網址貼到 historyApi 後，本月和過去每個月都會從流水帳自動整理。" })
+        ] : [
+          el("b", { text: "要看 " + ymLabel(ym) + " 的內容，需要先接上流水帳。" }),
+          el("div", { text: "其他月份是從點檢流水帳算出來的。照說明建好「讀取點檢流水帳」流程，把網址貼到 historyApi 後，選哪個月就會自動整理出那個月誰點了哪幾台。" })
+        ]));
+        box.appendChild(diagBox(sys0)); return;
+      }
+      box.appendChild(el("div", { class: "rec-msg", text: "讀取流水帳中…" }));
+      ensureHist(sys0).then(function () { if (S.sys === sys0) { fillMonthFilters(); renderMonth(); } })
+        .catch(function (e) { box.textContent = ""; box.appendChild(el("div", { class: "rec-msg err", text: "讀不到流水帳（" + (e.message || e) + "）。" })); });
+      return;
+    }
+    box.textContent = "";
+    var all = viewRows() || M.rows;
+    var c = { ok: 0, no: 0, ab: 0 }; all.forEach(function (r) { c[r.st]++; });
+    box.appendChild(el("div", { class: "kpis" }, [
+      el("div", { class: "kpi" }, [el("span", { text: "設備總數" }), el("b", { text: String(all.length) })]),
+      el("div", { class: "kpi ok" }, [el("span", { text: "已點檢" }), el("b", { text: String(c.ok) })]),
+      el("div", { class: "kpi no" }, [el("span", { text: "未點檢" }), el("b", { text: String(c.no) })]),
+      el("div", { class: "kpi ab" }, [el("span", { text: fromLog ? "異常" : "異常待改善" }), el("b", { text: String(c.ab) })])
+    ]));
+    var byF = {};
+    all.forEach(function (r) { (byF[r.f] = byF[r.f] || { n: 0, d: 0 }).n++; if (r.st !== "no") byF[r.f].d++; });
+    var fp = el("div", { class: "fprog" });
+    Object.keys(byF).sort().forEach(function (k) {
+      var x = byF[k], pct = x.n ? Math.round(x.d / x.n * 100) : 0, bar = el("div", { class: "bar" }, [el("i")]);
+      bar.firstChild.style.width = pct + "%";
+      fp.appendChild(el("div", { class: "r" }, [el("span", { text: FACT[k] || k }), bar, el("span", { class: "v", text: x.d + " / " + x.n + "（" + pct + "%）" })]));
+    });
+    if (Object.keys(byF).length) box.appendChild(fp);
+    box.appendChild(floorSummary(all));
+    var rows = monthFiltered(), isFire = S.sys === "fire";
+    box.appendChild(el("div", { class: "rec-meta", text: ymLabel(ym) + " · 符合條件 " + rows.length + " 台 · " + (!fromLog ? "即時資料讀取於 " + M.at.toLocaleTimeString("zh-TW", { hour: "2-digit", minute: "2-digit" }) : "依流水帳整理（每台取當月最後一筆）") }));
+    if (!rows.length) { box.appendChild(el("div", { class: "rec-msg", text: "沒有符合條件的設備。" })); if (isCur) box.appendChild(diagBox(S.sys)); return; }
+    var head = ["設備編號", "類型", "樓層", "位置", "狀態", "檢查員", "點檢時間", "異常項目"]; if (isFire) head.push("效期");
+    var tb = el("tbody");
+    rows.slice(0, S.limit).forEach(function (r) {
+      var tr = el("tr", null, [
+        el("td", { class: "mono", text: r.id }), el("td", { text: SRC[S.sys].types[r.t] || r.t }), el("td", { class: "mono", text: r.fl || "—" }), el("td", { text: r.loc || "—" }),
+        el("td", null, [el("span", { class: "st " + r.st, text: (fromLog && r.st === "ab") ? "異常" : STN[r.st] })]),
+        el("td", { text: r.who || (r.st === "no" ? "" : "—") }), el("td", { class: "mono", text: r.when || "" }), el("td", { text: r.ab || "" })
+      ]);
+      if (isFire) tr.appendChild(el("td", { class: "mono", text: r.exp || "" }));
+      tb.appendChild(tr);
+    });
+    box.appendChild(el("div", { class: "tbox" }, [el("table", null, [el("thead", null, [el("tr", null, head.map(function (h) { return el("th", { text: h }); }))]), tb])]));
+    if (rows.length > S.limit) box.appendChild(el("div", { class: "more-row" }, [el("button", { type: "button", class: "rbtn ghost", id: "rmMore", text: "再顯示 200 筆（共 " + rows.length + " 筆）" })]));
+    if (isCur) box.appendChild(diagBox(S.sys));
+  }
+
+  /* 各樓層：本月完成數與點檢人 */
+  function floorSummary(all) {
+    var f = $("rmFactory").value, t = $("rmType").value, g = {}, order = [];
+    all.forEach(function (r) {
+      if (f && f !== "all" && r.f !== f) return;
+      if (t && t !== "all" && r.t !== t) return;
+      var k = r.f + "|" + (r.fl || "");
+      if (!g[k]) { g[k] = { f: r.f, fl: r.fl, n: 0, d: 0, who: {}, last: "" }; order.push(k); }
+      var x = g[k]; x.n++;
+      if (r.st !== "no") { x.d++; if (r.who) x.who[r.who] = (x.who[r.who] || 0) + 1; if (r.when && r.when > x.last) x.last = r.when; }
+    });
+    order.sort(function (a, b) { var A = g[a], B = g[b]; return A.f.localeCompare(B.f) || floorRank(A.fl) - floorRank(B.fl); });
+    var wrap = el("div", { style: "margin-top:12px" });
+    var hasWho = all.some(function (r) { return r.who; });
+    wrap.appendChild(el("div", { style: "font-size:15px;font-weight:700;margin:4px 2px 0", text: "各樓層點檢狀況｜" + ymLabel(selYM()) }));
+    var tb = el("tbody");
+    order.forEach(function (k) {
+      var x = g[k], names = Object.keys(x.who).sort(function (a, b) { return x.who[b] - x.who[a]; });
+      var cls = x.d === x.n ? "ok" : x.d ? "ab" : "no";
+      var go = el("button", { type: "button", class: "rbtn ghost", style: "height:34px;font-size:13px;padding:0 10px", "data-floor": x.f + "|" + (x.fl || "none"), text: "看清單" });
+      tb.appendChild(el("tr", null, [
+        el("td", { text: FACT[x.f] || x.f }), el("td", { class: "mono", text: x.fl || "未註記" }),
+        el("td", null, [el("span", { class: "st " + cls, text: x.d + " / " + x.n })]),
+        el("td", { text: names.length ? names.map(function (n) { return n + (x.who[n] > 1 ? "（" + x.who[n] + "）" : ""); }).join("、") : (x.d ? "—" : "尚未點檢") }),
+        el("td", { class: "mono", text: x.last || "" }), el("td", null, [go])
+      ]));
+    });
+    wrap.appendChild(el("div", { class: "tbox" }, [el("table", null, [el("thead", null, [el("tr", null, ["廠區", "樓層", "完成", "檢查員（台數）", "最後點檢", ""].map(function (h) { return el("th", { text: h }); }))]), tb])]));
+    if (!hasWho) wrap.appendChild(el("div", { class: "rec-meta", text: SRC[S.sys].historyApi
+      ? "讀取的本月資料和歷史紀錄都沒有檢查員欄位。"
+      : "目前讀取網址回傳的本月資料沒有檢查員。接上「歷史紀錄」流程（historyApi）後，這裡會自動帶出本月是誰點檢的。" }));
+    return wrap;
+  }
+
+  /* ---------- 點檢項目（與消防、飲水機點檢頁內容相同，給稽核查閱） ---------- */
+  var ITEMS = {
+    fire: {
+      intro: "現場掃描設備 QR Code 後逐項確認；全部正常按「全部正常並送出」，有異常則勾選異常項目並填補充說明。每台設備每月點檢一次，當月送出後該設備即鎖定，避免重複點檢。",
+      groups: [
+        { code: "DCP", name: "乾粉滅火器", items: ["鋼瓶無鏽蝕變形", "皮管無堵塞斷裂", "安全插銷已固定", "壓力表指針在綠區", "前方無障礙物且在效期內"], ab: ["壓力不足", "插銷遺失", "藥劑過期", "瓶身鏽蝕", "皮管破損"], extra: "另顯示設備位置與有效期限" },
+        { code: "CO2", name: "二氧化碳滅火器", items: ["鋼瓶無鏽蝕變形", "喇叭噴嘴無裂損", "安全插銷已固定", "重量已有標示", "前方無障礙物"], ab: ["重量未標示", "插銷遺失", "噴嘴裂損", "前方堆放雜物"] },
+        { code: "FH", name: "消防栓", items: ["箱門前應淨空", "箱門完整可開關", "水帶無破損", "水瞄可轉動"], ab: ["箱體損壞", "水帶缺少或破裂", "水瞄不能轉動", "開關漏水", "前方堆放雜物"] },
+        { code: "EP", name: "緩降機", items: ["器具完整無短缺", "支架固定良好", "操作方法標示清楚", "下降空間無阻擋"], ab: ["支架鬆動", "繩索受潮或不符合樓層高度", "操作方式標示不清", "下降空間受阻"] }
+      ],
+      rec: "每筆紀錄保存：設備編號、點檢時間、檢查員、結果（正常／異常）、異常項目與補充說明。異常另記錄接收異常日期、完成改善日期與改善進度。可查閱各廠消防配置平面圖。"
+    },
+    water: {
+      intro: "現場掃描飲水機 QR Code 後逐項確認，提供中文與泰文介面。全部正常按「項目皆正常並送出」，有異常則勾選異常項目並填補充說明。每台每月點檢一次，當月送出後即鎖定。",
+      groups: [
+        { code: "WD", name: "飲水機（常規點檢／清洗保養）", items: ["面板燈號、溫度顯示正常", "機體周邊與底部無漏水現象", "出水口保持清潔、無異物殘留", "接水盤排水順暢、無積水阻塞"], ab: ["面板無顯示", "機身漏水", "出水有異味", "接水盤阻塞"], extra: "現場可開啟最新一期水質檢驗報告（中文、泰文）" }
+      ],
+      rec: "每筆紀錄保存：設備編號、時間、狀態（正常／異常）、檢查員、維護項目（常規點檢／清洗保養）、備註說明。水質檢驗報告依設備登記最新檢測日期與報告檔案。"
+    }
+  };
+  function renderItems() {
+    var box = $("riBody"), D = ITEMS[S.sys]; box.textContent = "";
+    box.appendChild(el("div", { class: "rec-msg", style: "color:var(--ink)" }, [el("b", { text: SRC[S.sys].name + "點檢方式" }), el("div", { text: D.intro })]));
+    var total = 0;
+    D.groups.forEach(function (g) {
+      total += g.items.length;
+      var tb = el("tbody"), n = Math.max(g.items.length, g.ab.length);
+      for (var i = 0; i < n; i++) tb.appendChild(el("tr", null, [el("td", { class: "mono", text: g.items[i] ? String(i + 1) : "" }), el("td", { text: g.items[i] || "" }), el("td", { text: g.ab[i] || "" })]));
+      box.appendChild(el("div", { style: "font-size:15px;font-weight:700;margin:16px 2px 0", text: g.name + "（編號含 " + g.code + "）" }));
+      box.appendChild(el("div", { class: "tbox" }, [el("table", null, [el("thead", null, [el("tr", null, [el("th", { text: "#" }), el("th", { text: "點檢項目（確認為正常）" }), el("th", { text: "可勾選的異常項目" })])]), tb])]));
+      if (g.extra) box.appendChild(el("div", { class: "rec-meta", text: g.extra }));
+    });
+    box.appendChild(el("div", { class: "rec-msg" }, [el("b", { text: "紀錄內容" }), el("div", { text: D.rec })]));
+    box.appendChild(el("div", { class: "rec-bar" }, [el("span", { class: "rec-meta", style: "margin:0;flex:1", text: "共 " + D.groups.length + " 類設備、" + total + " 個點檢項目。" }), el("button", { type: "button", class: "rbtn", id: "riExport", text: "匯出點檢項目表（Excel）" })]));
+  }
+  document.addEventListener("click", function (e) {
+    if (!e.target || e.target.id !== "riExport") return;
+    var aoa = [["系統", "設備類型", "編號代碼", "序號", "點檢項目（確認為正常）", "可勾選的異常項目"]];
+    ["fire", "water"].forEach(function (sys) {
+      ITEMS[sys].groups.forEach(function (g) {
+        var n = Math.max(g.items.length, g.ab.length);
+        for (var i = 0; i < n; i++) aoa.push([SRC[sys].name, g.name, g.code, g.items[i] ? i + 1 : "", g.items[i] || "", g.ab[i] || ""]);
+      });
+    });
+    exportAoa("消防與飲水機點檢項目表", aoa);
+  });
+
+  /* ---------- 飲用水檢測紀錄 ---------- */
+  function qualFiltered() {
+    var rows = (S.month.water || {}).rows || [], f = $("rqFactory").value, q = $("rqQ").value.trim().toUpperCase();
+    return rows.filter(function (r) {
+      if (f && f !== "all" && r.f !== f) return false;
+      if (q && (r.id + " " + r.loc).toUpperCase().indexOf(q) < 0) return false;
+      return true;
+    }).sort(function (a, b) { return a.id.localeCompare(b.id); });
+  }
+  function renderQual() {
+    var box = $("rqBody"), M = S.month.water; if (!M) return;
+    var f = $("rqFactory"), fv = f.value, fs = {};
+    M.rows.forEach(function (r) { fs[r.f] = 1; });
+    f.textContent = ""; f.appendChild(el("option", { value: "all", text: "全部廠區" }));
+    Object.keys(fs).sort().forEach(function (k) { f.appendChild(el("option", { value: k, text: FACT[k] || k })); });
+    if (fs[fv]) f.value = fv;
+    box.textContent = "";
+    var rows = qualFiltered(), noRpt = rows.filter(function (r) { return !r.rptZh && !r.rptTh; }).length;
+    box.appendChild(el("div", { class: "rec-meta", text: "共 " + rows.length + " 台" + (noRpt ? "，其中 " + noRpt + " 台在 Excel 沒有登記報告檔名" : "") }));
+    if (!rows.length) { box.appendChild(el("div", { class: "rec-msg", text: "沒有符合條件的飲水機。" })); return; }
+    var tb = el("tbody");
+    rows.forEach(function (r) {
+      var btns = el("div", { style: "display:flex;gap:6px;flex-wrap:wrap" });
+      if (r.rptZh) btns.appendChild(el("button", { type: "button", class: "rbtn ghost", style: "height:36px;font-size:14px", "data-rpt": r.rptZh, text: "中文報告" }));
+      if (r.rptTh) btns.appendChild(el("button", { type: "button", class: "rbtn ghost", style: "height:36px;font-size:14px", "data-rpt": r.rptTh, text: "泰文報告" }));
+      if (!r.rptZh && !r.rptTh) btns.appendChild(el("span", { style: "color:var(--muted)", text: "未登記" }));
+      tb.appendChild(el("tr", null, [el("td", { class: "mono", text: r.id }), el("td", { class: "mono", text: r.fl || "—" }), el("td", { text: r.loc || "—" }), el("td", { class: "mono", text: r.test || "—" }), el("td", null, [btns])]));
+    });
+    box.appendChild(el("div", { class: "tbox" }, [el("table", null, [el("thead", null, [el("tr", null, ["設備編號", "樓層", "位置", "最新檢測日期", "檢驗報告"].map(function (h) { return el("th", { text: h }); }))]), tb])]));
+  }
+  async function openReport(fileName, btn) {
+    var label = btn.textContent, win = null;
+    try { win = window.open("", "_blank"); if (win) win.document.write("<p style=\"font:16px sans-serif;padding:24px\">檔案讀取中…</p>"); } catch (e) { win = null; }
+    btn.disabled = true; btn.textContent = "讀取中…";
+    try {
+      var res = await fetch(DOWNLOAD_API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ fileName: fileName }) });
+      if (!res.ok) throw new Error(res.status);
+      var url = URL.createObjectURL(await res.blob());
+      if (win && !win.closed) win.location.href = url;
+      else { var a = document.createElement("a"); a.href = url; a.target = "_blank"; a.rel = "noopener"; document.body.appendChild(a); a.click(); a.remove(); }
+    } catch (e) {
+      if (win && !win.closed) win.close();
+      alert("檔案讀取失敗：請確認檔案已放在 OneDrive 專用資料夾，檔名為「" + fileName + "」。");
+    } finally { btn.disabled = false; btn.textContent = label; }
+  }
+
+  /* ---------- 歷史紀錄 ---------- */
+  function histRow(o) {
+    return {
+      when: excelDate(pick(o, ["timestamp", "點檢時間", "點檢日期", "檢查時間", "檢查日期", "時間", "日期", "Timestamp"])),
+      d: toDate(pick(o, ["timestamp", "點檢時間", "點檢日期", "檢查時間", "檢查日期", "時間", "日期", "Timestamp"])),
+      id: idOf(o),
+      who: whoOf(o, ["檢查員", "檢查人員", "檢查人", "inspector", "點檢人", "點檢執行人", "Inspector"]),
+      st: pick(o, ["status", "狀態", "結果", "Status"]),
+      item: pick(o, ["maintenanceItem", "維護項目", "作業類別", "點檢類別"]),
+      reason: pick(o, ["reason", "備註說明", "異常說明", "異常項目", "備註", "Reason"]).replace(/^無$/, ""),
+      loc: pick(o, ["location", "正確位置", "廠區位置", "位置"])
+    };
+  }
+  async function loadHist() {
+    var sys = S.sys, box = $("rhBody"), api = SRC[sys].historyApi;
+    box.textContent = "";
+    if (!api) { box.appendChild(histHelp()); return; }
+    box.appendChild(el("div", { class: "rec-msg", text: "讀取歷史紀錄中…" }));
+    try {
+      var data = await postJson(api, JSON.stringify({ from: $("rhFrom").value, to: $("rhTo").value }));
+      var list = asList(Array.isArray(data) ? data : (data.value || data.rows || data.data || []));
+      S.hist[sys] = { rows: list.map(histRow).filter(function (r) { return r.id; }), at: new Date() };
+      renderHist();
+    } catch (err) {
+      box.textContent = "";
+      box.appendChild(el("div", { class: "rec-msg err", text: "讀不到歷史紀錄（" + (err.message || err) + "）。" }));
+    }
+  }
+  function histFiltered() {
+    var H = S.hist[S.sys]; if (!H) return [];
+    var from = $("rhFrom").value ? new Date($("rhFrom").value + "T00:00:00") : null;
+    var to = $("rhTo").value ? new Date($("rhTo").value + "T23:59:59") : null;
+    var s = $("rhStatus").value, q = $("rhQ").value.trim().toUpperCase();
+    return H.rows.filter(function (r) {
+      if (from && r.d && r.d < from) return false;
+      if (to && r.d && r.d > to) return false;
+      if (s !== "all" && r.st.indexOf(s) < 0) return false;
+      if (q && (r.id + " " + r.who + " " + r.reason + " " + r.loc).toUpperCase().indexOf(q) < 0) return false;
+      return true;
+    }).sort(function (a, b) { return (b.d || 0) - (a.d || 0); });
+  }
+  function renderHist() {
+    var box = $("rhBody"), H = S.hist[S.sys]; box.textContent = "";
+    if (!SRC[S.sys].historyApi) { box.appendChild(histHelp()); return; }
+    if (!H) { box.appendChild(el("div", { class: "rec-msg", text: "選好日期區間後按「查詢」。" })); return; }
+    var rows = histFiltered(), ab = rows.filter(function (r) { return r.st.indexOf("異常") >= 0; }).length;
+    box.appendChild(el("div", { class: "rec-meta", text: "符合條件 " + rows.length + " 筆，其中異常 " + ab + " 筆" }));
+    if (!rows.length) { box.appendChild(el("div", { class: "rec-msg", text: "這個區間沒有紀錄。" })); return; }
+    var water = S.sys === "water", head = ["點檢時間", "設備編號", "檢查員", "結果", "異常說明"]; if (water) head.splice(4, 0, "作業類別");
+    var tb = el("tbody");
+    rows.slice(0, S.limit).forEach(function (r) {
+      var cls = r.st.indexOf("異常") >= 0 ? "ab" : "ok";
+      var cells = [el("td", { class: "mono", text: r.when }), el("td", { class: "mono", text: r.id }), el("td", { text: r.who }),
+        el("td", null, [el("span", { class: "st " + cls, text: r.st || "—" })])];
+      if (water) cells.push(el("td", { text: r.item }));
+      cells.push(el("td", { text: r.reason }));
+      tb.appendChild(el("tr", null, cells));
+    });
+    box.appendChild(el("div", { class: "tbox" }, [el("table", null, [el("thead", null, [el("tr", null, head.map(function (h) { return el("th", { text: h }); }))]), tb])]));
+    if (rows.length > S.limit) box.appendChild(el("div", { class: "more-row" }, [el("button", { type: "button", class: "rbtn ghost", id: "rhMore", text: "再顯示 200 筆（共 " + rows.length + " 筆）" })]));
+  }
+  function histHelp() {
+    return el("div", { class: "rec-msg" }, [
+      el("b", { text: SRC[S.sys].name + "的歷史紀錄還沒接上。" }),
+      el("div", { text: "目前的讀取網址只提供本月資料。在 Power Automate 建一個「讀取點檢流水帳」流程，把網址貼到這個檔案的 historyApi 後，這裡就能依日期查詢。" })
+    ]);
+  }
+
+  /* ---------- 匯出 Excel ---------- */
+  var xlsxLoading = null;
+  function loadXlsx() {
+    if (window.XLSX) return Promise.resolve();
+    if (xlsxLoading) return xlsxLoading;
+    xlsxLoading = new Promise(function (ok, no) {
+      var s = document.createElement("script");
+      s.src = "https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js";
+      s.onload = ok; s.onerror = function () { xlsxLoading = null; no(); }; document.head.appendChild(s);
+    });
+    return xlsxLoading;
+  }
+  function saveCsv(name, aoa) {
+    var csv = "﻿" + aoa.map(function (r) { return r.map(function (v) { v = v == null ? "" : String(v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(","); }).join("\r\n");
+    var a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+    a.download = name + ".csv"; document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  }
+  function exportAoa(name, aoa) {
+    loadXlsx().then(function () {
+      var ws = XLSX.utils.aoa_to_sheet(aoa), wb = XLSX.utils.book_new();
+      ws["!cols"] = aoa[0].map(function (_, i) { return { wch: Math.min(40, Math.max.apply(null, aoa.map(function (r) { return String(r[i] || "").length * 2 + 2; }))) }; });
+      XLSX.utils.book_append_sheet(wb, ws, "紀錄"); XLSX.writeFile(wb, name + ".xlsx");
+    }).catch(function () { saveCsv(name, aoa); });
+  }
+  function stamp() { var d = new Date(), p = function (n) { return String(n).padStart(2, "0"); }; return d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate()); }
+
+  /* ---------- 切換 ---------- */
+  function paint() {
+    $("rtFire").setAttribute("aria-selected", String(S.sys === "fire"));
+    $("rtWater").setAttribute("aria-selected", String(S.sys === "water"));
+    $("rvMonth").setAttribute("aria-pressed", String(S.view === "month"));
+    $("rvHist").setAttribute("aria-pressed", String(S.view === "hist"));
+    if (S.sys !== "water" && S.view === "qual") S.view = "month";
+    $("rvQual").hidden = S.sys !== "water";
+    $("planBar").classList.toggle("hidden", S.sys !== "fire");
+    $("rvQual").setAttribute("aria-pressed", String(S.view === "qual"));
+    $("recQual").classList.toggle("hidden", S.view !== "qual");
+    $("rvItems").setAttribute("aria-pressed", String(S.view === "items"));
+    $("recItems").classList.toggle("hidden", S.view !== "items");
+    $("recMonth").classList.toggle("hidden", S.view !== "month");
+    $("recHist").classList.toggle("hidden", S.view !== "hist");
+    S.limit = 200;
+    if (S.view === "month") { if (S.month[S.sys]) { fillMonthFilters(); renderMonth(); } else loadMonth(); }
+    else if (S.view === "items") renderItems();
+    else if (S.view === "qual") { if (S.month.water) renderQual(); else loadMonth().then(renderQual); }
+    else renderHist();
+  }
+  window.openRecords = function (view) {
+    if (view) S.view = view; else if (S.view === "items") S.view = "month";
+    $("portalRoot").classList.add("hidden"); $("recRoot").classList.remove("hidden"); window.scrollTo(0, 0); paint();
+  };
+  $("recBack").addEventListener("click", function () { $("recRoot").classList.add("hidden"); $("portalRoot").classList.remove("hidden"); window.scrollTo(0, 0); });
+  $("rtFire").addEventListener("click", function () { S.sys = "fire"; paint(); });
+  $("rtWater").addEventListener("click", function () { S.sys = "water"; paint(); });
+  $("rvMonth").addEventListener("click", function () { S.view = "month"; paint(); });
+  $("rvHist").addEventListener("click", function () { S.view = "hist"; paint(); });
+  $("rvQual").addEventListener("click", function () { S.view = "qual"; paint(); });
+  $("rvItems").addEventListener("click", function () { S.view = "items"; paint(); });
+  $("rqFactory").addEventListener("change", function () { renderQual(); });
+  $("rqQ").addEventListener("input", function () { renderQual(); });
+  $("rqReload").addEventListener("click", function () { loadMonth(true); });
+  $("rqExport").addEventListener("click", function () {
+    var rows = qualFiltered(); if (!rows.length) return;
+    exportAoa("飲用水檢測紀錄_" + stamp(), [["設備編號", "廠區", "位置", "最新檢測日期", "報告檔名（中文）", "報告檔名（泰文）"]].concat(rows.map(function (r) {
+      return [r.id, FACT[r.f] || r.f, r.loc, r.test, r.rptZh, r.rptTh];
+    })));
+  });
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest && e.target.closest("button[data-rpt]");
+    if (b) openReport(b.getAttribute("data-rpt"), b);
+  });
+  ["rmFactory", "rmFloor", "rmType", "rmStatus"].forEach(function (i) { $(i).addEventListener("change", function () { S.limit = 200; renderMonth(); }); });
+  $("rmQ").addEventListener("input", function () { S.limit = 200; renderMonth(); });
+  $("rmMonth").value = curYM(); $("rmMonth").max = curYM();
+  $("rmMonth").addEventListener("change", function () { S.limit = 200; if (!$("rmMonth").value) $("rmMonth").value = curYM(); fillMonthFilters(); renderMonth(); });
+  $("rmReload").addEventListener("click", function () { loadMonth(true); });
+  ["rhStatus", "rhFrom", "rhTo"].forEach(function (i) { $(i).addEventListener("change", function () { S.limit = 200; renderHist(); }); });
+  $("rhQ").addEventListener("input", function () { S.limit = 200; renderHist(); });
+  $("rhLoad").addEventListener("click", loadHist);
+  document.addEventListener("click", function (e) {
+    if (e.target.id === "rmMore") { S.limit += 200; renderMonth(); }
+    var fb = e.target.closest && e.target.closest("button[data-floor]");
+    if (fb) {
+      var pr = fb.getAttribute("data-floor").split("|");
+      $("rmFactory").value = pr[0]; $("rmFloor").value = pr[1]; $("rmStatus").value = "all"; S.limit = 200; renderMonth();
+      var tbl = $("rmBody").querySelectorAll(".tbox")[1]; if (tbl) tbl.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    if (e.target.id === "rhMore") { S.limit += 200; renderHist(); }
+  });
+  $("rmExport").addEventListener("click", function () {
+    var rows = monthFiltered(); if (!rows.length) return;
+    var isFire = S.sys === "fire", h = ["設備編號", "廠區", "樓層", "類型", "位置", "狀態", "檢查員", "點檢時間", "異常項目"]; if (isFire) h.push("效期");
+    exportAoa(SRC[S.sys].name + "點檢進度_" + selYM().replace("-", ""), [h].concat(rows.map(function (r) {
+      var a = [r.id, FACT[r.f] || r.f, r.fl, SRC[S.sys].types[r.t] || r.t, r.loc, STN[r.st], r.who, r.when, r.ab]; if (isFire) a.push(r.exp); return a;
+    })));
+  });
+  $("rhExport").addEventListener("click", function () {
+    var rows = histFiltered(); if (!rows.length) return;
+    exportAoa(SRC[S.sys].name + "點檢紀錄_" + stamp(), [["點檢時間", "設備編號", "位置", "檢查員", "結果", "作業類別", "異常說明"]].concat(rows.map(function (r) {
+      return [r.when, r.id, r.loc, r.who, r.st, r.item, r.reason];
+    })));
+  });
+  /* 預設日期：本年 1 月 1 日到今天 */
+  var t = new Date(), p2 = function (n) { return String(n).padStart(2, "0"); };
+  $("rhTo").value = t.getFullYear() + "-" + p2(t.getMonth() + 1) + "-" + p2(t.getDate());
+  $("rhFrom").value = t.getFullYear() + "-01-01";
+})();
+</script>
+
 </body>
 </html>
