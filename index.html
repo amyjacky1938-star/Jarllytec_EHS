@@ -24,6 +24,7 @@
       mail:   "https://claude.ai/artifact/MsV4qyhg33SXRRcZ6c3Ddw"    // 管理部：掛號信簽收簿
     },
     adminDepts: ["管理部", "勞安室", "集團管理處"],   // 哪些部門登入後看得到「管理部專區」
+    healthDepts: ["勞安室"],                          // 哪些部門登入後看得到「健康檢查資料中心」
     depts: ["勞安室","管理部","製造一部","製造二部","製造三部","光纖業務部","研發一部","研發二部","研發三部","研發四部",
             "集團管理處","集團人資處","集團資訊處","集團財務處","集團業務中心","專案開發部","工程部","品保部","專利商標部","資材部",
             "品質中心","總經理室","永續發展部"]
@@ -350,7 +351,7 @@
       <div class="err" id="err" role="alert"></div>
       <button class="btn" type="submit" data-t="enter">進入</button>
     </form>
-    <div class="note" data-t="signNote">此入口只用來辨識身分，不是密碼鎖。「健康檢查資料中心」含個人健康資料，進入時需要另外登入。</div>
+    <div class="note" data-t="signNote">此入口只用來辨識身分，不是密碼鎖。健康檢查資料只有勞安室看得到，進入時還要另外登入。</div>
   </section>
 
   <!-- 系統選單 -->
@@ -384,12 +385,12 @@
         <small data-t="recSub">本月進度、歷史紀錄、點檢項目一覽</small>
       </a>
 
-      <a class="tile health" id="tHealth" href="#" target="_blank" rel="noopener">
+      <a class="tile health hidden" id="tHealth" href="#" target="_blank" rel="noopener">
         <span class="ic" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-5 4 10 2-5h6"/></svg></span>
         <span class="txt">
           <b data-t="health">健康檢查資料中心</b>
           <small data-t="healthSub">員工健檢判讀、異常追蹤與年度統計。含個人健康資料，僅限職安衛人員使用。</small>
-          <span class="lock"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span data-t="lockTag">受保護資料｜需另外登入</span></span>
+          <span class="lock"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span data-t="lockTag">勞安室專用｜需另外登入</span></span>
         </span>
       </a>
 
@@ -1871,13 +1872,13 @@ function loadOneDriveImage(imgElementId, fileName) {
     zh: {
       title: "兆利 EHS 智慧管理平台", signTitle: "請先填寫身分", signSub: "進入各系統時會自動帶入你的姓名。",
       name: "姓名", namePh: "例如：張小明", dept: "所屬部門", remember: "今天在這支手機記住我（個人手機才勾）", enter: "進入",
-      signNote: "此入口只用來辨識身分，不是密碼鎖。「健康檢查資料中心」含個人健康資料，進入時需要另外登入。",
+      signNote: "此入口只用來辨識身分，不是密碼鎖。健康檢查資料只有勞安室看得到，進入時還要另外登入。",
       switch: "切換使用者", fire: "消防點檢", fireSub: "滅火器、消防栓、緩降機", onsite: "僅限現場掃碼",
       dlgT: "請到現場掃描 QR Code", dlgP: "點檢必須在設備現場進行：用手機相機掃描設備上的 QR Code，就會直接開啟該設備的點檢畫面。",
       dlgS: "要查看點檢進度、歷史紀錄或點檢項目，請使用「點檢紀錄與項目」。", dlgGo: "查看點檢紀錄與項目", dlgOk: "知道了",
       water: "飲水機點檢", waterSub: "月點檢、水質報告", ehs: "EHS 缺失通報", ehsSub: "通報、改善追蹤、審核",
       ehsOff: "尚未設定網址", health: "健康檢查資料中心", rec: "點檢紀錄與項目", recSub: "本月進度、歷史紀錄、點檢項目一覽", items: "點檢項目一覽", itemsSub: "消防、飲水機各設備要檢查哪些項目，可匯出給稽核",
-      healthSub: "員工健檢判讀、異常追蹤與年度統計。含個人健康資料，僅限職安衛人員使用。", lockTag: "受保護資料｜需另外登入",
+      healthSub: "員工健檢判讀、異常追蹤與年度統計。含個人健康資料，僅限職安衛人員使用。", lockTag: "勞安室專用｜需另外登入",
       paper: "管理部｜影印紙統計系統", paperSub: "各部門影印／列印張數、費用分攤、月報與同期比較。", paperTag: "管理部專用｜需另外登入",
       mail: "管理部｜掛號信簽收簿", mailSub: "掛號信登記、同事到管理部領取時手寫簽收、各部門統計與簽收單匯出。",
       needName: "請填寫姓名", hi: "你好，"
@@ -1892,7 +1893,7 @@ function loadOneDriveImage(imgElementId, fileName) {
       fire: "ตรวจอุปกรณ์ดับเพลิง", fireSub: "ถังดับเพลิง ตู้ดับเพลิง",
       water: "ตรวจตู้กดน้ำ", waterSub: "ตรวจรายเดือน รายงานคุณภาพน้ำ", ehs: "แจ้งข้อบกพร่อง EHS", ehsSub: "แจ้ง ติดตาม อนุมัติ",
       ehsOff: "ยังไม่ได้ตั้งค่า", health: "ระบบตรวจสุขภาพ", rec: "บันทึกการตรวจ", recSub: "ความคืบหน้าและประวัติ", items: "รายการตรวจ", itemsSub: "รายการที่ต้องตรวจของแต่ละอุปกรณ์",
-      healthSub: "ข้อมูลสุขภาพพนักงาน เฉพาะเจ้าหน้าที่ความปลอดภัย", lockTag: "ข้อมูลคุ้มครอง｜เข้าสู่ระบบแยก",
+      healthSub: "ข้อมูลสุขภาพพนักงาน เฉพาะเจ้าหน้าที่ความปลอดภัย", lockTag: "เฉพาะฝ่ายความปลอดภัย｜เข้าสู่ระบบแยก",
       paper: "ฝ่ายบริหาร｜สถิติกระดาษถ่ายเอกสาร", paperSub: "จำนวนการถ่ายเอกสาร/พิมพ์ของแต่ละแผนก ค่าใช้จ่าย และรายงานรายเดือน", paperTag: "เฉพาะฝ่ายบริหาร｜เข้าสู่ระบบแยก",
       mail: "ฝ่ายบริหาร｜สมุดรับจดหมายลงทะเบียน", mailSub: "บันทึกจดหมายลงทะเบียน เซ็นรับที่ฝ่ายบริหาร สถิติแต่ละแผนก",
       needName: "กรุณาใส่ชื่อ", hi: ""
@@ -1938,6 +1939,8 @@ function loadOneDriveImage(imgElementId, fileName) {
     store("inspector", u.name); store("wd_inspector", u.name);
     $("whoName").textContent = (T[lang].hi || "") + u.name;
     $("whoDept").textContent = u.dept;
+    /* 健康檢查資料中心：只有 CONFIG.healthDepts 裡的部門看得到 */
+    $("tHealth").classList.toggle("hidden", !(CONFIG.links.health && (CONFIG.healthDepts || []).indexOf(u.dept) >= 0));
     /* 管理部專區：只有 CONFIG.adminDepts 裡的部門看得到 */
     $("tPaper").classList.toggle("hidden", !(CONFIG.links.paper && (CONFIG.adminDepts || []).indexOf(u.dept) >= 0));
     $("tMail").classList.toggle("hidden", !(CONFIG.links.mail && (CONFIG.adminDepts || []).indexOf(u.dept) >= 0));
