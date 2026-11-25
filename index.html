@@ -788,11 +788,11 @@
             <div class="photo-grid">
                 <div class="photo-box">
                     <span>📸 通報缺失照</span>
-                    <img id="imgBefore" src="https://placehold.co/400x300?text=Loading..." alt="通報缺失照" onclick="openLightbox(this)">
+                    <img id="imgBefore" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22400%22%20height%3D%22300%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23e2e8f0%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20fill%3D%22%2364748b%22%20font-size%3D%2222%22%20font-family%3D%22sans-serif%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E8%BC%89%E5%85%A5%E4%B8%AD%E2%80%A6%3C%2Ftext%3E%3C%2Fsvg%3E" alt="通報缺失照" onclick="openLightbox(this)">
                 </div>
                 <div class="photo-box">
                     <span>🛠️ 改善完成照</span>
-                    <img id="imgAfter" src="https://placehold.co/400x300?text=Loading..." alt="改善完成照" onclick="openLightbox(this)">
+                    <img id="imgAfter" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22400%22%20height%3D%22300%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23e2e8f0%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20fill%3D%22%2364748b%22%20font-size%3D%2222%22%20font-family%3D%22sans-serif%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%3E%E8%BC%89%E5%85%A5%E4%B8%AD%E2%80%A6%3C%2Ftext%3E%3C%2Fsvg%3E" alt="改善完成照" onclick="openLightbox(this)">
                 </div>
             </div>
 
@@ -825,7 +825,7 @@
     
 </div><!-- /ehsRoot -->
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
     <script>
     const POWER_AUTOMATE_SAVE_URL = "https://default5e08b912309f4900b9e179fae11d8e.2a.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/07/workflows/ae80a43b0d5e4062bf5b532833b1dad0/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=2DYPzn3BsDuCv6xsFn-pwC7wtxo1nTdakVZscqYmbMo";
@@ -852,7 +852,7 @@
     let myPieChart = null;
     let myFactoryChart = null;
 
-    // 廠區專屬色彩設定函式[cite: 2, 6]
+    // 廠區專屬色彩設定函式
     function getFactoryBadgeStyle(factory) {
         switch(factory) {
             case '本廠': return 'background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd;';
@@ -864,7 +864,7 @@
         }
     }
 
-    // 樓層專屬色彩設定函式[cite: 2, 6]
+    // 樓層專屬色彩設定函式
     function getFloorBadgeStyle(floor) {
         if (!floor) return 'background: #f8fafc; color: #475569; border: 1px solid #cbd5e1;';
         if (floor.includes('B')) {
@@ -994,22 +994,38 @@
         reader.readAsDataURL(file);
     }
 
+    // 把使用者輸入的文字轉成安全的 HTML（避免 XSS）
+    function esc(v) {
+        return String(v ?? "").replace(/[&<>"']/g, c =>
+            ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    }
+
+    // 內建佔位圖（不需連外網）
+    function ph(text) {
+        return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(
+            '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300">' +
+            '<rect width="100%" height="100%" fill="#e2e8f0"/>' +
+            '<text x="50%" y="50%" fill="#64748b" font-size="22" font-family="sans-serif" text-anchor="middle" dominant-baseline="middle">' +
+            esc(text) + '</text></svg>');
+    }
+    function isPh(src) { return !src || src.startsWith("data:image/svg+xml"); }
+
     function formatBase64Src(str) {
         if (!str || str === "undefined" || str === "null" || str.trim() === "") {
-            return "https://placehold.co/400x300?text=No+Image";
+            return ph("無照片");
         }
         let clean = str.trim().replace(/^"|"$/g, '').replace(/\\/g, '').replace(/\s/g, '');   
         if (clean.startsWith('http://') || clean.startsWith('https://') || clean.startsWith('data:image')) {
             return clean;
         }
         if (clean.length > 30) return "data:image/jpeg;base64," + clean;
-        return "https://placehold.co/400x300?text=No+Image";
+        return ph("無照片");
     }
 
     function openLightbox(imgElement) {
         const lightbox = document.getElementById('imageLightbox');
         const lightboxImg = document.getElementById('lightboxImg');
-        if (imgElement && imgElement.src && !imgElement.src.includes('placehold.co')) {
+        if (imgElement && imgElement.src && !isPh(imgElement.src)) {
             lightboxImg.src = imgElement.src;
             lightbox.style.display = 'flex';
         }
@@ -1189,6 +1205,15 @@
     }
 
     function executeLogout() {
+        closeDetailModal();
+        currentUserRole = "reporter";
+        currentUserRealName = "";
+        currentDefectPhotoBase64 = "";
+        currentWorkerPhotoBase64 = "";
+        mockDatabase = [];
+        document.getElementById('defectListContainer').innerHTML = "";
+        document.getElementById('userDisplay').innerText = "-";
+        document.getElementById('roleDisplay').innerText = "-";
         document.getElementById('appSection').classList.add('hidden');
         document.getElementById('loginSection').classList.remove('hidden');
         document.getElementById('regEmpId').value = "";
@@ -1215,7 +1240,7 @@
 function loadOneDriveImage(imgElementId, fileName) {
     const imgEl = document.getElementById(imgElementId);
     if (!fileName || fileName === "undefined" || fileName === "null" || fileName.trim() === "") {
-        imgEl.src = "https://placehold.co/400x300?text=No+Image";
+        imgEl.src = ph("無照片");
         return;
     }
 
@@ -1225,7 +1250,7 @@ function loadOneDriveImage(imgElementId, fileName) {
         return;
     }
 
-    imgEl.src = "https://placehold.co/400x300?text=Loading+Photo...";
+    imgEl.src = ph("照片載入中…");
 
     // 透過 POST 請求呼叫 Power Automate 取得 OneDrive 圖片
     fetch(POWER_AUTOMATE_PHOTO_URL, {
@@ -1243,7 +1268,7 @@ function loadOneDriveImage(imgElementId, fileName) {
     })
     .catch(err => {
         console.error("讀取雲端照片錯誤:", err);
-        imgEl.src = "https://placehold.co/400x300?text=Load+Failed";
+        imgEl.src = ph("照片載入失敗");
     });
 }
 
@@ -1450,21 +1475,21 @@ function loadOneDriveImage(imgElementId, fileName) {
             card.innerHTML = `
                 <div class="defect-header">
                     <div style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap;">
-                        <span class="badge" style="${factoryStyle}">${item.factory}</span>
-                        <span class="badge" style="${floorStyle}">${item.floor}</span>
-                        <span class="badge badge-category">🏷️ ${item.category || "其他"}</span>
+                        <span class="badge" style="${factoryStyle}">${esc(item.factory)}</span>
+                        <span class="badge" style="${floorStyle}">${esc(item.floor)}</span>
+                        <span class="badge badge-category">🏷️ ${esc(item.category || "其他")}</span>
                     </div>
                     <div class="dh-status">
                         ${isOverdue ? '<span class="badge" style="background:#fee2e2; color:#ef4444; border:1px solid #fca5a5;">⚠️ 逾期未結</span>' : ''}
-                        <span class="badge ${statusBadgeClass}">${item.status}</span>
+                        <span class="badge ${statusBadgeClass}">${esc(item.status)}</span>
                     </div>
                 </div>
-                <div class="dh-loc">📍 ${item.location}</div>
+                <div class="dh-loc">📍 ${esc(item.location)}</div>
                 <div style="margin-top:6px; font-size:13px; color:#334155; line-height:1.5;">
-                    ${item.description}
+                    ${esc(item.description)}
                 </div>
                 <div class="stamp-box">
-                    通報: ${item.reporterName} | ${item.reportTime}
+                    通報: ${esc(item.reporterName)} | ${esc(item.reportTime)}
                 </div>
             `;
             container.appendChild(card);
@@ -1511,13 +1536,13 @@ function loadOneDriveImage(imgElementId, fileName) {
                 workerSection.innerHTML = `
                     <h4 style="font-weight: bold; color: #ea580c; margin-top: 0; margin-bottom: 8px; font-size: 14px;">🛠️ 改善進行中</h4>
                     <div style="font-size:12px; color:#475569; margin-bottom:8px; background:#fff; padding:6px; border-radius:4px; border:1px solid #fed7aa;">
-                        <b>接收人員：</b>${item.receiverName || "-"}<br>
-                        <b>接收時間：</b>${item.receivedTime || "-"}<br>
-                        <b>初估意見：</b>${item.receiveNote || "-"}
+                        <b>接收人員：</b>${esc(item.receiverName || "-")}<br>
+                        <b>接收時間：</b>${esc(item.receivedTime || "-")}<br>
+                        <b>初估意見：</b>${esc(item.receiveNote || "-")}
                     </div>
                     <div class="form-group">
                         <label>🔧 實際改善人員姓名</label>
-                        <input type="text" id="inputWorkerName" value="${currentUserRealName}" placeholder="例如：王小工(工務部)">
+                        <input type="text" id="inputWorkerName" value="${esc(currentUserRealName)}" placeholder="例如：王小工(工務部)">
                     </div>
                     <div class="form-group">
                         <label>🔧 改善完成狀況說明</label>
@@ -1543,12 +1568,12 @@ function loadOneDriveImage(imgElementId, fileName) {
                 workerSection.innerHTML = `
                     <h4 style="font-weight: bold; color: #ea580c; margin-top: 0; margin-bottom: 4px; font-size: 14px;">🛠️ 工務改善紀錄</h4>
                     <div style="font-size:13px; line-height:1.5;">
-                        <b>接收人員：</b>${item.receiverName || "-"}<br>
-                        <b>接收時間：</b>${item.receivedTime || "-"}<br>
-                        <b>初估意見：</b>${item.receiveNote || "-"}<br>
-                        <b>改善人員：</b>${item.workerName || "-"}<br>
-                        <b>改善時間：</b>${item.workerTime || "-"}<br>
-                        <b>改善說明：</b>${item.workerDesc || "-"}
+                        <b>接收人員：</b>${esc(item.receiverName || "-")}<br>
+                        <b>接收時間：</b>${esc(item.receivedTime || "-")}<br>
+                        <b>初估意見：</b>${esc(item.receiveNote || "-")}<br>
+                        <b>改善人員：</b>${esc(item.workerName || "-")}<br>
+                        <b>改善時間：</b>${esc(item.workerTime || "-")}<br>
+                        <b>改善說明：</b>${esc(item.workerDesc || "-")}
                     </div>
                 `;
             }
@@ -1557,12 +1582,12 @@ function loadOneDriveImage(imgElementId, fileName) {
             workerSection.innerHTML = `
                 <h4 style="font-weight: bold; color: #ea580c; margin-top: 0; margin-bottom: 4px; font-size: 14px;">🛠️ 工務改善紀錄</h4>
                 <div style="font-size:13px; line-height:1.5;">
-                    <b>接收人員：</b>${item.receiverName || "-"}<br>
-                    <b>接收時間：</b>${item.receivedTime || "-"}<br>
-                    <b>初估意見：</b>${item.receiveNote || "-"}<br>
-                    <b>改善人員：</b>${item.workerName || "-"}<br>
-                    <b>改善時間：</b>${item.workerTime || "-"}<br>
-                    <b>改善說明：</b>${item.workerDesc || "-"}
+                    <b>接收人員：</b>${esc(item.receiverName || "-")}<br>
+                    <b>接收時間：</b>${esc(item.receivedTime || "-")}<br>
+                    <b>初估意見：</b>${esc(item.receiveNote || "-")}<br>
+                    <b>改善人員：</b>${esc(item.workerName || "-")}<br>
+                    <b>改善時間：</b>${esc(item.workerTime || "-")}<br>
+                    <b>改善說明：</b>${esc(item.workerDesc || "-")}
                 </div>
             `;
         }
@@ -1580,7 +1605,7 @@ function loadOneDriveImage(imgElementId, fileName) {
             if (hasManagerRecord) {
                 document.getElementById('managerCommentView').style.display = "block";
                 document.getElementById('managerCommentView').innerText = item.managerComment || "OK，已完成確認";
-                document.getElementById('managerMeta').innerText = `審核主管: ${item.managerName} | 時間: ${item.managerTime}`;
+                document.getElementById('managerMeta').innerText = `審核主管: ${esc(item.managerName)} | 時間: ${esc(item.managerTime)}`;
             }
         }
 
