@@ -175,6 +175,72 @@
 .rec-msg.err { color: #8e2f1b; background: #fdecea; border-color: #f5c6bf; }
 .rec-meta { font-size: 13px; color: var(--muted); margin-top: 10px; }
 .more-row { text-align: center; padding: 12px; }
+/* ===== 異常改善 ===== */
+.fx-list { display: grid; gap: 10px; margin-top: 12px; }
+.fx-k { text-align: left; font: inherit; cursor: pointer; color: inherit; transition: border-color .15s, box-shadow .15s; }
+.fx-k:hover { border-color: #b9c7bf; }
+.fx-k[aria-pressed="true"] { border-color: #1f3a5a; box-shadow: inset 0 0 0 1px #1f3a5a; background: #f4f7fb; }
+.fx-sec { display: flex; align-items: baseline; gap: 8px; margin: 22px 2px 8px; flex-wrap: wrap; }
+.fx-sec h3 { margin: 0; font-size: 16px; }
+.fx-cnt { font-size: 13px; font-weight: 700; background: #e3e9e6; color: var(--ink); border-radius: 999px; padding: 1px 9px; }
+.fx-note { font-size: 12.5px; color: var(--muted); margin-left: auto; }
+.fx-grid2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 10px; }
+@media (max-width: 400px) { .fx-grid2 { grid-template-columns: 1fr; } }
+.fx-grid2 .fx-card { gap: 4px; align-content: start; }
+.fx-sub { font-size: 13px; color: var(--muted); }
+.fx-age { font-size: 12.5px; font-weight: 700; color: var(--muted); margin-left: auto; }
+.fx-age.late { color: #b42318; }
+.fx-ab b { font-weight: 700; }
+.fx-fix .lbl { font-size: 12.5px; font-weight: 700; color: #1a5c3a; margin-right: 6px; }
+.fx-allok { margin-top: 18px; background: #e3f1e8; color: #1a5c3a; border-radius: 14px; padding: 12px 14px; font-weight: 700; font-size: 14px; }
+.fx-done { margin-top: 0; }
+.fx-done td { vertical-align: middle; }
+.fx-done td.muted { color: var(--muted); }
+.fx-done tbody tr:hover { background: #f8faf9; }
+@media (max-width: 640px) {
+  .fx-done table { min-width: 0; }
+  .fx-done thead { display: none; }
+  .fx-done tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 10px; padding: 10px 12px; border-bottom: 1px solid #eef2ef; }
+  .fx-done td { padding: 0; border: 0; }
+  .fx-done td:nth-child(1), .fx-done td:nth-child(4) { display: none; }
+  .fx-done td:nth-child(2) { grid-column: 1; grid-row: 1; }
+  .fx-done td:nth-child(2) > div { display: inline; margin-right: 8px; }
+  .fx-done td:nth-child(3) { grid-column: 1; grid-row: 2; color: #8e2f1b; }
+  .fx-done td:nth-child(5) { grid-column: 1; grid-row: 3; font-size: 13.5px; }
+  .fx-done td:nth-child(6) { grid-column: 2; grid-row: 1; font-size: 13px; color: var(--muted); text-align: right; white-space: nowrap; }
+  .fx-done td:nth-child(7) { grid-column: 2; grid-row: 2 / 4; align-self: center; justify-self: end; }
+}
+.fx-card { background: var(--surface); border: 1px solid var(--line); border-left: 5px solid #b42318; border-radius: 14px; padding: 12px 14px; display: grid; gap: 6px; font-size: 14px; line-height: 1.6; }
+.fx-card.doing { border-left-color: #c27c0e; } .fx-card.done { border-left-color: #1f7a4a; }
+.fx-h { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; }
+.fx-h .id { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-weight: 700; font-size: 15px; }
+.fx-h .sub { color: var(--muted); flex: 1 1 auto; min-width: 0; }
+.fx-grid2 .fx-act { margin-top: 4px; }
+.fx-ab { color: #8e2f1b; }
+.fx-meta { font-size: 13px; color: var(--muted); }
+.fx-fix { background: #f3f7f4; border: 1px solid #e3ebe6; border-radius: 10px; padding: 8px 10px; }
+.fx-fix > b { display: block; font-size: 13px; color: #1a5c3a; }
+.fx-fix .txt { white-space: pre-wrap; word-break: break-word; }
+.fx-pend { font-size: 12.5px; font-weight: 700; color: #7a4800; background: #fdf1dc; border-radius: 999px; padding: 2px 10px; justify-self: start; }
+.fx-act { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
+.fx-act .rbtn { height: 38px; font-size: 14px; }
+.st.doing { background: #fdf1dc; color: #7a4800; }
+.rbtn.sm { height: 32px; font-size: 13px; padding: 0 10px; }
+.fx-box { background: #fff; border-radius: 18px; padding: 20px; max-width: 560px; width: 100%; max-height: calc(100vh - 32px); overflow-y: auto; display: grid; gap: 12px; text-align: left; box-shadow: 0 20px 40px rgba(0,0,0,.25); }
+.fx-box h3 { margin: 0; font-size: 18px; }
+.fx-box label { display: grid; gap: 6px; font-size: 14px; font-weight: 700; color: var(--ink); }
+.fx-box label small { font-weight: 400; color: var(--muted); }
+.fx-box input[type=date], .fx-box input[type=text], .fx-box textarea { font: inherit; font-size: 16px; font-weight: 400; border: 1px solid #c4cfc8; border-radius: 10px; padding: 9px 10px; width: 100%; background: #fff; color: var(--ink); }
+.fx-box textarea { resize: vertical; min-height: 96px; }
+.fx-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 480px) { .fx-grid { grid-template-columns: 1fr; } }
+.fx-info { background: #fdecea; color: #8e2f1b; border-radius: 10px; padding: 10px 12px; font-size: 14px; line-height: 1.6; }
+.fx-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.fx-chips button { border: 1px solid var(--line); background: #f6f8f7; border-radius: 999px; padding: 5px 10px; font: inherit; font-size: 13px; cursor: pointer; color: var(--ink); }
+.fx-prev { max-width: 100%; max-height: 180px; border-radius: 10px; justify-self: start; }
+.fx-btns { display: flex; gap: 8px; justify-content: flex-end; }
+.fx-err { color: var(--fire); font-size: 14px; min-height: 1em; }
+.fx-toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: #17211c; color: #fff; padding: 10px 16px; border-radius: 12px; font-size: 14px; z-index: 200; max-width: calc(100% - 32px); box-shadow: 0 8px 20px rgba(0,0,0,.25); }
 </style>
 <style>
 /* ===== EHS 缺失通報（範圍限定在 #ehsRoot） ===== */
@@ -417,6 +483,36 @@
 </div>
 </div><!-- /portalRoot -->
 
+<div id="fixDlg" class="dlg hidden" role="dialog" aria-modal="true" aria-labelledby="fxTitle">
+  <form class="fx-box" id="fxForm" novalidate>
+    <h3 id="fxTitle">填寫異常改善內容</h3>
+    <div class="fx-info" id="fxInfo"></div>
+    <div>
+      <div style="font-size:14px;font-weight:700;margin-bottom:6px">改善進度</div>
+      <div class="seg" role="group" aria-label="改善進度">
+        <button type="button" id="fxP1" data-prog="處理中" aria-pressed="true">處理中</button>
+        <button type="button" id="fxP2" data-prog="已完成" aria-pressed="false">已完成改善</button>
+      </div>
+    </div>
+    <div class="fx-grid">
+      <label>異常接收日期<input type="date" id="fxRecv"></label>
+      <label id="fxDoneL">完成改善日期<input type="date" id="fxDone"></label>
+    </div>
+    <label>改善方式 <small>（必填）</small>
+      <textarea id="fxDesc" rows="4" placeholder="例：通知庭維請廠商做更換／更換備品滅火器，效期29.08.30"></textarea>
+    </label>
+    <div class="fx-chips" id="fxChips"></div>
+    <label>改善人員<input type="text" id="fxWho" autocomplete="name"></label>
+    <label>改善後照片 <small>（選填，會自動壓縮）</small><input type="file" id="fxPhoto" accept="image/*"></label>
+    <img id="fxPrev" class="fx-prev hidden" alt="改善後照片預覽">
+    <div class="fx-err" id="fxErr" role="alert"></div>
+    <div class="fx-btns">
+      <button type="button" class="rbtn ghost" id="fxCancel">取消</button>
+      <button type="submit" class="rbtn" id="fxSave">儲存改善內容</button>
+    </div>
+  </form>
+</div>
+
 <div id="onsiteDlg" class="dlg hidden" role="dialog" aria-modal="true" aria-labelledby="onsiteT">
   <div class="dlg-box">
     <div class="dlg-ic" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v.01M14 20h.01M17 20h4v-3"/></svg></div>
@@ -447,17 +543,35 @@
       <button type="button" id="rvMonth" aria-pressed="true">本月進度</button>
       <button type="button" id="rvHist" aria-pressed="false">歷史紀錄</button>
       <button type="button" id="rvQual" aria-pressed="false" hidden>水質報告</button>
+      <button type="button" id="rvFix" aria-pressed="false" hidden>異常改善</button>
       <button type="button" id="rvItems" aria-pressed="false">點檢項目</button>
     </div>
 
     <div id="planBar" class="rec-bar" style="background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 12px">
       <span style="font-size:14px;font-weight:700;color:var(--muted)">消防配置平面圖</span>
-      <button type="button" class="rbtn ghost" data-rpt="J1-平面圖.pdf">J1 本廠</button>
-      <button type="button" class="rbtn ghost" data-rpt="J2-平面圖.pdf">J2 二廠</button>
-      <button type="button" class="rbtn ghost" data-rpt="J3-平面圖.pdf">J3 三廠</button>
+      <button type="button" class="rbtn ghost" data-rpt="J1-平面圖.pdf">J1</button>
+      <button type="button" class="rbtn ghost" data-rpt="J2-平面圖.pdf">J2</button>
+      <button type="button" class="rbtn ghost" data-rpt="J3-平面圖.pdf">J3</button>
     </div>
 
     <div id="recItems" class="hidden"><div id="riBody"></div></div>
+
+    <div id="recFix" class="hidden">
+      <div class="rec-bar">
+        <select id="rfFactory" aria-label="廠區"></select>
+        <select id="rfStatus" aria-label="改善狀態" hidden>
+          <option value="all">全部異常</option>
+          <option value="open">未完成（待改善＋改善中）</option>
+          <option value="todo">待改善</option>
+          <option value="doing">改善中</option>
+          <option value="done">已完成改善</option>
+        </select>
+        <input type="search" id="rfQ" placeholder="搜尋設備編號、位置、異常、改善方式" aria-label="搜尋">
+        <button type="button" class="rbtn ghost" id="rfReload">重新整理</button>
+        <button type="button" class="rbtn" id="rfExport">匯出 Excel</button>
+      </div>
+      <div id="rfBody"></div>
+    </div>
 
     <div id="recQual" class="hidden">
       <div class="rec-bar">
@@ -483,6 +597,7 @@
         <label style="font-size:14px;color:var(--muted);display:flex;align-items:center;gap:6px">月份 <input type="month" id="rmMonth"></label>
         <input type="search" id="rmQ" placeholder="搜尋設備編號、位置" aria-label="搜尋">
         <button type="button" class="rbtn ghost" id="rmReload">重新整理</button>
+        <button type="button" class="rbtn ghost" id="rmPdf">點檢報表 PDF</button>
         <button type="button" class="rbtn" id="rmExport">匯出 Excel</button>
       </div>
       <div id="rmBody"></div>
@@ -603,9 +718,9 @@
             <div class="form-group">
                 <label>📍 廠區棟別</label>
                 <select id="inputFactory" onchange="updateFloorOptions()">
-                    <option value="本廠">本廠 (J1)</option>
-                    <option value="二廠">二廠 (J2)</option>
-                    <option value="三廠">三廠 (J3)</option>
+                    <option value="本廠">J1</option>
+                    <option value="二廠">J2</option>
+                    <option value="三廠">J3</option>
                     <option value="宿舍">宿舍 (DORM)</option>
                     <option value="KD大樓">KD大樓</option>
                 </select>
@@ -678,9 +793,9 @@
                     <label style="font-size: 11px; font-weight: bold; color: #475569; display: block; margin-bottom: 4px;">🏢 廠區篩選</label>
                     <select id="filterFactory" onchange="setSelectFilter('factory', this.value)" style="padding: 6px; font-size: 12px; background: white;">
                         <option value="ALL">全部廠區</option>
-                        <option value="本廠">本廠 (J1)</option>
-                        <option value="二廠">二廠 (J2)</option>
-                        <option value="三廠">三廠 (J3)</option>
+                        <option value="本廠">J1</option>
+                        <option value="二廠">J2</option>
+                        <option value="三廠">J3</option>
                         <option value="宿舍">宿舍 (DORM)</option>
                         <option value="KD大樓">KD大樓</option>
                     </select>
@@ -853,6 +968,8 @@
     let myFactoryChart = null;
 
     // 廠區專屬色彩設定函式
+    /* 畫面只顯示 J1／J2／J3（Excel 裡存的值不變） */
+    function factoryLabel(f) { return ({ "本廠": "J1", "二廠": "J2", "三廠": "J3" })[String(f || "").trim()] || f; }
     function getFactoryBadgeStyle(factory) {
         switch(factory) {
             case '本廠': return 'background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd;';
@@ -927,6 +1044,29 @@
         return "";
     }
 
+    /* iPhone 的 HEIC／HEIF 照片：先轉成 JPG（只有遇到 HEIC 才載入轉檔工具） */
+    var heicLoading = null;
+    function isHeic(file) { return /hei[cf]/i.test(file.type || "") || /\.(heic|heif)$/i.test(file.name || ""); }
+    function loadHeic2any() {
+        if (window.heic2any) return Promise.resolve();
+        if (heicLoading) return heicLoading;
+        heicLoading = new Promise(function (ok, no) {
+            var sc = document.createElement("script");
+            sc.src = "https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js";
+            sc.onload = ok; sc.onerror = function () { heicLoading = null; no(new Error("轉檔工具下載失敗")); };
+            document.head.appendChild(sc);
+        });
+        return heicLoading;
+    }
+    window.prepImageFile = function (file) {
+        if (!file || !isHeic(file)) return Promise.resolve(file);
+        return loadHeic2any().then(function () { return heic2any({ blob: file, toType: "image/jpeg", quality: 0.9 }); })
+            .then(function (out) { return Array.isArray(out) ? out[0] : out; });
+    };
+    window.photoReadFail = function (err) {
+        alert("❌ 這張照片讀不出來" + (err && err.message ? "（" + err.message + "）" : "") + "。\n請改用 JPG 或 PNG 照片，或直接用手機拍照上傳。");
+    };
+
     function compressImage(file, callback) {
         const reader = new FileReader();
         reader.onload = function(e) {
@@ -945,6 +1085,7 @@
                 const ctx = canvas.getContext('2d');
                 ctx.imageSmoothingEnabled = true;
                 ctx.imageSmoothingQuality = 'high';
+                ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, width, height);   // PNG 透明背景轉白色
                 ctx.drawImage(img, 0, 0, width, height);
                 
                 let quality = 0.82;
@@ -955,9 +1096,10 @@
                 }
                 callback(compressedBase64);
             };
+            img.onerror = function () { photoReadFail(); };
             img.src = e.target.result;
         };
-        reader.readAsDataURL(file);
+        prepImageFile(file).then(function (f) { reader.readAsDataURL(f); }).catch(photoReadFail);
     }
 
     // 已修正重複宣告，統一採用高畫質優化版
@@ -979,6 +1121,7 @@
                 const ctx = canvas.getContext('2d');
                 ctx.imageSmoothingEnabled = true;
                 ctx.imageSmoothingQuality = 'high';
+                ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, width, height);   // PNG 透明背景轉白色
                 ctx.drawImage(img, 0, 0, width, height);
                 
                 let quality = 0.82;
@@ -989,9 +1132,10 @@
                 }
                 callback(compressedBase64);
             };
+            img.onerror = function () { photoReadFail(); };
             img.src = e.target.result;
         };
-        reader.readAsDataURL(file);
+        prepImageFile(file).then(function (f) { reader.readAsDataURL(f); }).catch(photoReadFail);
     }
 
     // 把使用者輸入的文字轉成安全的 HTML（避免 XSS）
@@ -1063,7 +1207,15 @@
 
     function refreshDataFromCloud(isBackground = false) {
         if (!POWER_AUTOMATE_GET_URL) return;
-        if (!isBackground) showLoading(true);
+        /* 先顯示上次的清單，背景再更新（加速） */
+        let shownCache = false;
+        if (!mockDatabase.length) {
+            try {
+                const c = JSON.parse(localStorage.getItem('ehs_cache_v1') || 'null');
+                if (c && Array.isArray(c.data)) { applyEhsData(c.data); shownCache = true; }
+            } catch (e) {}
+        }
+        if (!isBackground && !shownCache) showLoading(true);
 
         fetch(POWER_AUTOMATE_GET_URL, { 
             method: "POST",
@@ -1073,6 +1225,14 @@
         .then(res => res.json())
         .then(data => {
             let finalData = Array.isArray(data) ? data : (data.data || []);
+            applyEhsData(finalData);
+            try { localStorage.setItem('ehs_cache_v1', JSON.stringify({ at: Date.now(), data: finalData })); } catch (e) {}
+        })
+        .catch(err => { console.error(err); })
+        .finally(() => { showLoading(false); });
+    }
+
+    function applyEhsData(finalData) {
             mockDatabase = finalData.map(item => ({
                 id: getProp(item, "id"),
                 factory: getProp(item, "factory"),
@@ -1100,9 +1260,6 @@
             renderCategoryPieChart();
             renderFactoryBarChart();
             updateChartDateRange();
-        })
-        .catch(err => { console.error(err); })
-        .finally(() => { if (!isBackground) showLoading(false); });
     }
 
     function saveToCloud(actionType, itemData) {
@@ -1245,11 +1402,22 @@ function loadOneDriveImage(imgElementId, fileName) {
     }
 
     // 如果本身已經是 Base64 或完整網址，直接顯示
-    if (fileName.startsWith('data:image') || fileName.startsWith('http://') || fileName.startsWith('https://')) {
+    if (fileName.startsWith('data:image')) {
+        /* Excel 單一儲存格最多 32,767 字，照片文字超過會被截斷 */
+        imgEl.onerror = function () { imgEl.onerror = null; imgEl.src = ph(fileName.length >= 32000 ? "照片資料被截斷（" + fileName.length + " 字）" : "照片資料損壞"); };
+        imgEl.src = fileName;
+        return;
+    }
+    if (fileName.startsWith('http://') || fileName.startsWith('https://')) {
+        imgEl.onerror = function () { imgEl.onerror = null; imgEl.src = ph("照片網址打不開"); };
         imgEl.src = fileName;
         return;
     }
 
+    const key = fileName.trim();
+    window.__photoMemo = window.__photoMemo || {};
+    imgEl.dataset.want = key;
+    if (window.__photoMemo[key]) { imgEl.src = window.__photoMemo[key]; return; }   /* 看過的照片直接顯示 */
     imgEl.src = ph("照片載入中…");
 
     // 透過 POST 請求呼叫 Power Automate 取得 OneDrive 圖片
@@ -1259,16 +1427,20 @@ function loadOneDriveImage(imgElementId, fileName) {
         body: JSON.stringify({ fileName: fileName.trim() })
     })
     .then(res => {
-        if (!res.ok) throw new Error("圖片載入失敗");
+        if (!res.ok) throw new Error("找不到照片檔（" + res.status + "）");
         return res.blob();
     })
     .then(blob => {
+        if (blob.size < 200 || (blob.type && !/^image\//.test(blob.type) && !/octet-stream/.test(blob.type))) throw new Error("雲端回傳的不是圖片");
         const objectURL = URL.createObjectURL(blob);
+        window.__photoMemo[key] = objectURL;
+        if (imgEl.dataset.want !== key) return;   /* 已切換到別筆案件 */
+        imgEl.onerror = function () { imgEl.onerror = null; imgEl.src = ph("照片檔損壞"); };
         imgEl.src = objectURL;
     })
     .catch(err => {
-        console.error("讀取雲端照片錯誤:", err);
-        imgEl.src = ph("照片載入失敗");
+        console.error("讀取雲端照片錯誤:", fileName, err);
+        imgEl.src = ph(err && err.message ? err.message : "照片載入失敗");
     });
 }
 
@@ -1475,7 +1647,7 @@ function loadOneDriveImage(imgElementId, fileName) {
             card.innerHTML = `
                 <div class="defect-header">
                     <div style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap;">
-                        <span class="badge" style="${factoryStyle}">${esc(item.factory)}</span>
+                        <span class="badge" style="${factoryStyle}">${esc(factoryLabel(item.factory))}</span>
                         <span class="badge" style="${floorStyle}">${esc(item.floor)}</span>
                         <span class="badge badge-category">🏷️ ${esc(item.category || "其他")}</span>
                     </div>
@@ -1499,7 +1671,7 @@ function loadOneDriveImage(imgElementId, fileName) {
     function openDetailModal(item) {
         currentEditingItem = item;
         document.getElementById('detId').innerText = item.id || "-";
-        document.getElementById('detFactory').innerText = item.factory || "-";
+        document.getElementById('detFactory').innerText = factoryLabel(item.factory) || "-";
         document.getElementById('detFloor').innerText = item.floor || "-";
         document.getElementById('detReporter').innerText = item.reporterName || "-";
         document.getElementById('detLocation').innerText = item.location || "-";
@@ -1747,7 +1919,7 @@ function loadOneDriveImage(imgElementId, fileName) {
         window.myFactoryChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: labels,
+                labels: labels.map(factoryLabel),
                 datasets: [{
                     label: '通報件數',
                     data: dataValues,
@@ -1802,7 +1974,7 @@ function loadOneDriveImage(imgElementId, fileName) {
                             typeCount[cat] = (typeCount[cat] || 0) + 1;
                         });
 
-                        let summaryText = `🏢 【${selectedFactory}】通報類型統計：\n`;
+                        let summaryText = `🏢 【${factoryLabel(selectedFactory)}】通報類型統計：\n`;
                         if (factoryItems.length === 0) {
                             summaryText += "目前選擇的區間無任何通報記錄。";
                         } else {
@@ -1971,6 +2143,7 @@ function loadOneDriveImage(imgElementId, fileName) {
     $("tMail").classList.toggle("hidden", !(CONFIG.links.mail && (CONFIG.adminDepts || []).indexOf(u.dept) >= 0));
     $("foot").textContent = "© " + CONFIG.company + " " + CONFIG.orgName;
     $("signin").classList.add("hidden"); $("home").classList.remove("hidden");
+    setTimeout(function () { if (window.recPrefetch) window.recPrefetch(); }, 300);   /* 背景先讀消防資料 */
   }
 
   $("signForm").addEventListener("submit", function (ev) {
@@ -2037,7 +2210,10 @@ function loadOneDriveImage(imgElementId, fileName) {
       name: "消防",
       readApi: "https://default5e08b912309f4900b9e179fae11d8e.2a.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/936bca953b404ce3b51409647874490d/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=5Zexelu5ljymRba54JEjA6o7kITqo5QIb2baBR8QvPA",
       historyApi: "https://default5e08b912309f4900b9e179fae11d8e.2a.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/28/workflows/4dac9654dae245ef83721b341e170e6a/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=OmfleYVotduxdEfru1g410or53iNnmQ5toLinTrrtz4",   // ← 歷史紀錄讀取流程建好後，把網址貼在這裡
-      types: { DCP: "乾粉滅火器", CO2: "二氧化碳滅火器", FH: "消防栓", EP: "緩降機" }
+      types: { DCP: "乾粉滅火器", CO2: "二氧化碳滅火器", FH: "消防栓", EP: "緩降機" },
+      fix: true,     // 顯示「異常改善」頁籤
+      fixApi: "https://default5e08b912309f4900b9e179fae11d8e.2a.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/26/workflows/aa9a9601890e49b0b187fe56dd030a59/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=oZCw0BaCXQ5v2QyGEUpRzStDSZo3fiFq-befWK81zZ4",    // 「回寫消防異常區域」流程（寫回 Excel 異常專區）
+      fixListApi: "https://default5e08b912309f4900b9e179fae11d8e.2a.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/18/workflows/77346fd876554a57be2db01133076281/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=AVv3J_M2-MYnjtaG1r7jv1gwtJFbxi2lXoMcXJ_uH2c"   // 「讀取異常專區」流程（全部異常＋序號）
     },
     water: {
       name: "飲水機",
@@ -2049,7 +2225,7 @@ function loadOneDriveImage(imgElementId, fileName) {
   };
   /* OneDrive 檔案下載中轉（消防平面圖、水質報告共用，與點檢頁相同） */
   var DOWNLOAD_API = "https://default5e08b912309f4900b9e179fae11d8e.2a.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/92b8d989449d4f70983d1365e3c4c3d8/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=xnVNjU5EcnH8a9uu2_zYO7cvQGJe2mNh7rupl-2mvwQ";
-  var FACT = { J1: "本廠 J1", J2: "二廠 J2", J3: "三廠 J3", DORM: "宿舍", KD: "KD大樓" };
+  var FACT = { J1: "J1", J2: "J2", J3: "J3", DORM: "宿舍", KD: "KD大樓" };
   var S = { sys: "fire", view: "month", month: {}, hist: {}, limit: 200 };
 
   function $(id) { return document.getElementById(id); }
@@ -2078,7 +2254,7 @@ function loadOneDriveImage(imgElementId, fileName) {
       if (+s % 1) t += " " + p(d.getUTCHours()) + ":" + p(d.getUTCMinutes());
       return t;
     }
-    return s.replace("T", " ").replace(/(\.\d+)?Z$/, "").replace(/(\d{2}:\d{2}):00$/, "$1").replace(/-/g, "/");
+    return s.replace("T", " ").replace(/(\.\d+)?Z$/, "").replace(/(\d{2}:\d{2}):00$/, "$1").replace(/-/g, "/").replace(/ 00:00$/, "");
   }
   function toDate(v) {
     var s = excelDate(v); if (!s) return null;
@@ -2148,12 +2324,64 @@ function loadOneDriveImage(imgElementId, fileName) {
   function typeOf(sys, id) { var t = Object.keys(SRC[sys].types); for (var i = 0; i < t.length; i++) if (id.indexOf(t[i]) >= 0) return t[i]; return "其他"; }
 
   /* ---------- 本月進度 ---------- */
+  /* ---- 讀取加速：兩個流程同時讀、先顯示上次資料、背景更新 ---- */
+  var CACHE_KEY = "rec_cache_v1_";
+  function cacheGet(sys) { try { var c = JSON.parse(localStorage.getItem(CACHE_KEY + sys) || "null"); return c && c.data ? c : null; } catch (e) { return null; } }
+  function cacheSet(sys, data, ld) { try { localStorage.setItem(CACHE_KEY + sys, JSON.stringify({ at: Date.now(), data: data, ld: ld })); } catch (e) {} }
+  function fetchSys(sys) {
+    var a = postJson(SRC[sys].readApi, "{}");
+    var b = SRC[sys].fixListApi ? postJson(SRC[sys].fixListApi, JSON.stringify({ action: "list" })).catch(function (e) { return { __err: e.message || String(e) }; }) : Promise.resolve(null);
+    return Promise.all([a, b]);
+  }
+  function boxFor() { return S.view === "qual" ? $("rqBody") : S.view === "fix" ? $("rfBody") : $("rmBody"); }
+  function repaint(sys) {
+    if (S.sys !== sys || $("recRoot").classList.contains("hidden")) return;
+    fillMonthFilters();
+    if (S.view === "month") renderMonth(); else if (S.view === "qual") renderQual(); else if (S.view === "fix") renderFix();
+  }
+  S.refreshing = {};
+  function refreshSys(sys) {
+    if (S.refreshing[sys]) return S.refreshing[sys];
+    S.refreshing[sys] = fetchSys(sys).then(function (r) {
+      S.month[sys] = buildMonth(sys, r[0], r[1], new Date());
+      cacheSet(sys, r[0], r[1] && !r[1].__err ? r[1] : null);
+      S.hist[sys] = null;           /* 流水帳也一起重新讀 */
+      repaint(sys); fillWhoFromHistory(sys);
+    }).finally(function () { S.refreshing[sys] = null; });
+    return S.refreshing[sys];
+  }
+  /* 登入入口後先在背景讀消防資料 */
+  window.recPrefetch = function () {
+    ["fire"].forEach(function (sys) {
+      if (S.month[sys] || S.refreshing[sys]) return;
+      var c = cacheGet(sys);
+      if (c) { try { S.month[sys] = buildMonth(sys, c.data, c.ld, new Date(c.at)); S.month[sys].stale = true; } catch (e) {} }
+      refreshSys(sys).catch(function () {});
+    });
+  };
   async function loadMonth(force) {
-    var sys = S.sys, box = S.view === "qual" ? $("rqBody") : $("rmBody");
-    if (S.month[sys] && !force) { renderMonth(); return; }
+    var sys = S.sys, box = boxFor();
+    if (!S.month[sys]) {
+      var c = cacheGet(sys);
+      if (c) { try { S.month[sys] = buildMonth(sys, c.data, c.ld, new Date(c.at)); S.month[sys].stale = true; } catch (e) { S.month[sys] = null; } }
+    }
+    if (S.month[sys]) {
+      repaint(sys);
+      if (!force && !S.month[sys].stale) { fillWhoFromHistory(sys); return; }
+      if (S.month[sys].stale || force) { S.month[sys].stale = true; repaint(sys); }
+      try { await refreshSys(sys); }
+      catch (err) { if (S.month[sys]) { S.month[sys].staleErr = err.message || String(err); repaint(sys); } }
+      return;
+    }
     box.textContent = ""; box.appendChild(el("div", { class: "rec-msg", text: "讀取" + SRC[sys].name + "資料中…" }));
-    try {
-      var data = await postJson(SRC[sys].readApi, "{}");
+    try { await refreshSys(sys); }
+    catch (err) {
+      box = boxFor(); box.textContent = "";
+      box.appendChild(el("div", { class: "rec-msg err", text: "讀不到" + SRC[sys].name + "資料（" + (err.message || err) + "）。請確認網路，或 Power Automate 流程是否正常。" }));
+      if (S.diag && S.diag[sys]) box.appendChild(diagBox(sys));
+    }
+  }
+  function buildMonth(sys, data, ld, at) {
       S.diag = S.diag || {};
       S.diag[sys] = (function () {
         var keys = Array.isArray(data) ? "（整包是陣列，" + data.length + " 筆）" : Object.keys(data || {}).map(function (k) {
@@ -2162,16 +2390,18 @@ function loadOneDriveImage(imgElementId, fileName) {
         }).join("、");
         var dl = asList(data.deviceDetails || data.value || data.devices || (Array.isArray(data) ? data : []));
         var first = dl[0] && typeof dl[0] === "object" ? Object.keys(dl[0]).map(function (k) { return "「" + k + "」"; }).join("") : String(dl[0] || "（沒有）");
-        var done0 = asList(data.doneList)[0];
-        return "回應欄位：" + keys + "\n設備清單第一筆的欄位：" + first + "\ndoneList 第一筆：" + (done0 == null ? "（沒有）" : JSON.stringify(done0).slice(0, 120));
+        var done0 = asList(data.doneList)[0], err0 = asList(data.errorList)[0];
+        return "回應欄位：" + keys + "\n設備清單第一筆的欄位：" + first + "\ndoneList 第一筆：" + (done0 == null ? "（沒有）" : JSON.stringify(done0).slice(0, 120)) +
+          "\nerrorList 筆數：" + asList(data.errorList).length + "\nerrorList 第一筆：" + (err0 == null ? "（沒有）" : JSON.stringify(err0).slice(0, 600));
       })();
       var devices = asList(data.deviceDetails || data.value || data.devices || (Array.isArray(data) ? data : []));
       if (!devices.length) devices = asList(data.deviceLocation).filter(function (o) { return o && typeof o === "object"; });
       if (!devices.length) throw new Error("連上了，但沒有收到設備清單。收到的欄位：" + (Array.isArray(data) ? "（陣列，0 筆）" : Object.keys(data || {}).join("、") || "（空的）"));
       var doneRaw = asList(data.doneList), doneSet = {}, doneStr = JSON.stringify(data.doneList || "").toUpperCase();
       doneRaw.forEach(function (d) { var i = idOf(d); if (i) doneSet[i] = d; });
-      var openAb = {}, fixedAb = {};
+      var openAb = {}, fixedAb = {}, errors = [];
       asList(data.errorList).forEach(function (e) {
+        if (e && typeof e === "object") { var er = errRow(e, sys); if (er) errors.push(er); }
         var i = idOf(e); if (!i) return;
         var fixed = pick(e, ["完成改善日期"]);
         if (!fixed || fixed === "undefined" || fixed === "null") openAb[i] = pick(e, ["異常項目", "損壞備註", "備註"]) || "異常";
@@ -2203,14 +2433,22 @@ function loadOneDriveImage(imgElementId, fileName) {
         };
       }).filter(Boolean);
       var hasDone = !Array.isArray(data) && data && ("doneList" in data || "errorList" in data);
-      S.month[sys] = { rows: rows, at: new Date(), hasDone: hasDone };
-      fillMonthFilters(); renderMonth(); if (S.view === "qual") renderQual();
-      fillWhoFromHistory(sys);
-    } catch (err) {
-      box.textContent = "";
-      box.appendChild(el("div", { class: "rec-msg err", text: "讀不到" + SRC[sys].name + "資料（" + (err.message || err) + "）。請確認網路，或 Power Automate 流程是否正常。" }));
-      if (S.diag && S.diag[sys]) box.appendChild(diagBox(sys));
-    }
+      var hasErr = !Array.isArray(data) && data && ("errorList" in data), listErr = "";
+      if (ld && ld.__err) listErr = ld.__err;
+      else if (ld) {
+          var all = asList(Array.isArray(ld) ? ld : (ld.value || ld.body || ld.rows || ld.data || [])).filter(function (o) { return o && typeof o === "object"; });
+          errors = all.map(function (e) { return errRow(e, sys); }).filter(Boolean); hasErr = true;
+          S.diag[sys] += "\n異常專區筆數：" + all.length + "\n異常專區第一筆：" + (all[0] ? JSON.stringify(all[0]).slice(0, 600) : "（沒有）");
+      }
+      var M = { rows: rows, at: at || new Date(), hasDone: hasDone, errors: errors, hasErr: hasErr, listErr: listErr };
+      S.month[sys] = M; applyFix(sys);
+      return M;
+  }
+  function staleNote(M) {
+    var t = M.at.toLocaleString("zh-TW", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" });
+    if (M.staleErr) return "⚠ 更新失敗，顯示的是 " + t + " 的資料（" + M.staleErr + "）";
+    if (M.stale) return "⟳ 正在更新最新資料…（目前顯示 " + t + " 的資料）";
+    return "資料讀取於 " + t;
   }
   function diagBox(sys) {
     var d = el("details", { style: "margin-top:10px;font-size:13px;color:var(--muted)" }, [
@@ -2294,6 +2532,16 @@ function loadOneDriveImage(imgElementId, fileName) {
     if (fs[fv]) f.value = fv; if (ts[tv]) t.value = tv;
     t.hidden = Object.keys(ts).length < 2;
   }
+  /* 只套用廠區、類型、樓層（不含狀態與搜尋），給統計數字與報表用 */
+  function scopeRows(rows) {
+    var f = $("rmFactory").value, t = $("rmType").value, fl = $("rmFloor").value;
+    return (rows || []).filter(function (r) {
+      if (f && f !== "all" && r.f !== f) return false;
+      if (t && t !== "all" && r.t !== t) return false;
+      if (fl && fl !== "all" && (fl === "none" ? r.fl : r.fl !== fl)) return false;
+      return true;
+    });
+  }
   function monthFiltered() {
     var fl = $("rmFloor").value;
     var rows = viewRows() || [], f = $("rmFactory").value, t = $("rmType").value, s = $("rmStatus").value, q = $("rmQ").value.trim().toUpperCase();
@@ -2328,16 +2576,16 @@ function loadOneDriveImage(imgElementId, fileName) {
       return;
     }
     box.textContent = "";
-    var all = viewRows() || M.rows;
-    var c = { ok: 0, no: 0, ab: 0 }; all.forEach(function (r) { c[r.st]++; });
+    var all = viewRows() || M.rows, sc = scopeRows(all), fsel = $("rmFactory").value;
+    var c = { ok: 0, no: 0, ab: 0 }; sc.forEach(function (r) { c[r.st]++; });
     box.appendChild(el("div", { class: "kpis" }, [
-      el("div", { class: "kpi" }, [el("span", { text: "設備總數" }), el("b", { text: String(all.length) })]),
+      el("div", { class: "kpi" }, [el("span", { text: "設備總數" + (fsel && fsel !== "all" ? "｜" + (FACT[fsel] || fsel) : "") }), el("b", { text: String(sc.length) })]),
       el("div", { class: "kpi ok" }, [el("span", { text: "已點檢" }), el("b", { text: String(c.ok) })]),
       el("div", { class: "kpi no" }, [el("span", { text: "未點檢" }), el("b", { text: String(c.no) })]),
       el("div", { class: "kpi ab" }, [el("span", { text: fromLog ? "異常" : "異常待改善" }), el("b", { text: String(c.ab) })])
     ]));
     var byF = {};
-    all.forEach(function (r) { (byF[r.f] = byF[r.f] || { n: 0, d: 0 }).n++; if (r.st !== "no") byF[r.f].d++; });
+    sc.forEach(function (r) { (byF[r.f] = byF[r.f] || { n: 0, d: 0 }).n++; if (r.st !== "no") byF[r.f].d++; });
     var fp = el("div", { class: "fprog" });
     Object.keys(byF).sort().forEach(function (k) {
       var x = byF[k], pct = x.n ? Math.round(x.d / x.n * 100) : 0, bar = el("div", { class: "bar" }, [el("i")]);
@@ -2347,17 +2595,19 @@ function loadOneDriveImage(imgElementId, fileName) {
     if (Object.keys(byF).length) box.appendChild(fp);
     box.appendChild(floorSummary(all));
     var rows = monthFiltered(), isFire = S.sys === "fire";
-    box.appendChild(el("div", { class: "rec-meta", text: ymLabel(ym) + " · 符合條件 " + rows.length + " 台 · " + (!fromLog ? "即時資料讀取於 " + M.at.toLocaleTimeString("zh-TW", { hour: "2-digit", minute: "2-digit" }) : "依流水帳整理（每台取當月最後一筆）") }));
+    box.appendChild(el("div", { class: "rec-meta", text: ymLabel(ym) + " · 符合條件 " + rows.length + " 台 · " + (!fromLog ? staleNote(M) : "依流水帳整理（每台取當月最後一筆）") }));
     if (!rows.length) { box.appendChild(el("div", { class: "rec-msg", text: "沒有符合條件的設備。" })); if (isCur) box.appendChild(diagBox(S.sys)); return; }
     var head = ["設備編號", "類型", "樓層", "位置", "狀態", "檢查員", "點檢時間", "異常項目"]; if (isFire) head.push("效期");
+    var canFix = SRC[S.sys].fix && !fromLog && (M.errors || []).length; if (canFix) head.push("改善");
     var tb = el("tbody");
     rows.slice(0, S.limit).forEach(function (r) {
       var tr = el("tr", null, [
         el("td", { class: "mono", text: r.id }), el("td", { text: SRC[S.sys].types[r.t] || r.t }), el("td", { class: "mono", text: r.fl || "—" }), el("td", { text: r.loc || "—" }),
-        el("td", null, [el("span", { class: "st " + r.st, text: (fromLog && r.st === "ab") ? "異常" : STN[r.st] })]),
+        el("td", null, [el("span", { class: "st " + (r.st === "ab" && r.fixing && !fromLog ? "doing" : r.st), text: (fromLog && r.st === "ab") ? "異常" : (r.st === "ab" && r.fixing ? "改善中" : STN[r.st]) })]),
         el("td", { text: r.who || (r.st === "no" ? "" : "—") }), el("td", { class: "mono", text: r.when || "" }), el("td", { text: r.ab || "" })
       ]);
       if (isFire) tr.appendChild(el("td", { class: "mono", text: r.exp || "" }));
+      if (canFix) tr.appendChild(el("td", null, r.st === "ab" ? [el("button", { type: "button", class: "rbtn sm", "data-fixid": r.id, text: r.fixing ? "修改改善" : "填寫改善" })] : (r.fixed ? [el("span", { class: "st ok", text: "已改善" })] : [])));
       tb.appendChild(tr);
     });
     box.appendChild(el("div", { class: "tbox" }, [el("table", null, [el("thead", null, [el("tr", null, head.map(function (h) { return el("th", { text: h }); }))]), tb])]));
@@ -2586,6 +2836,331 @@ function loadOneDriveImage(imgElementId, fileName) {
   }
   function stamp() { var d = new Date(), p = function (n) { return String(n).padStart(2, "0"); }; return d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate()); }
 
+  /* ---------- 異常改善（填寫改善內容、寫回 Excel） ---------- */
+  function errRow(e, sys) {
+    var id = idOf(e); if (!id) return null;
+    var clean = function (v) { return /^(undefined|null)$/i.test(v) ? "" : v; };
+    var r = {
+      id: id, f: factoryOf(id), t: typeOf(sys, id),
+      key: clean(pick(e, ["序號", "異常編號", "紀錄編號", "ItemInternalId", "__PowerAppsId__"])),
+      when: excelDate(clean(pick(e, ["填寫異常日期", "點檢時間", "異常日期", "發現日期", "檢查時間", "檢查日期", "timestamp", "Timestamp", "時間", "日期"]))),
+      who: whoOf(e, ["檢查員", "檢查人員", "檢查人", "點檢人", "點檢人員", "inspector", "Inspector"]),
+      item: clean(pick(e, ["異常項目"])) || "異常",
+      note: clean(pick(e, ["損壞備註", "補充說明", "備註說明", "備註"])).replace(/^無$/, ""),
+      loc: clean(pick(e, ["正確位置", "設置位置", "位置"])), area: clean(pick(e, ["廠區位置"])),
+      recv: excelDate(clean(pick(e, ["異常接收日期", "接收異常日期"]))),
+      prog: clean(pick(e, ["改善進度"])),
+      desc: clean(pick(e, ["改善方式", "改善內容", "改善措施", "改善說明", "處理說明"])),
+      fixer: clean(pick(e, ["改善人員", "處理人員"])),
+      done: excelDate(clean(pick(e, ["完成改善日期"]))),
+      photo: clean(pick(e, ["改善照片", "改善照片檔名"]))
+    };
+    if (r.item === "異常" && r.note) { r.item = r.note.trim(); r.note = ""; }
+    if (r.note === r.item) r.note = "";
+    r.k = r.key || (r.id + "|" + r.when + "|" + r.item);
+    return r;
+  }
+  var FXN = { todo: "待改善", doing: "改善中", done: "已完成改善" }, FXC = { todo: "no", doing: "doing", done: "ok" };
+  function fixState(r) { if (r.done || /完成|結案/.test(r.prog)) return "done"; if (r.desc || r.recv || r.prog) return "doing"; return "todo"; }
+  var FIX_LS = "rec_fix_local_v1";
+  function fixLocal() { try { return JSON.parse(localStorage.getItem(FIX_LS) || "{}") || {}; } catch (e) { return {}; } }
+  function fixLocalSave(o) {
+    try { localStorage.setItem(FIX_LS, JSON.stringify(o)); return true; }
+    catch (e) { /* 空間不足：拿掉照片再存 */
+      Object.keys(o).forEach(function (k) { delete o[k].photoBase64; });
+      try { localStorage.setItem(FIX_LS, JSON.stringify(o)); } catch (e2) {}
+      return false;
+    }
+  }
+  function fixRows(sys) {
+    var M = S.month[sys]; if (!M) return [];
+    var L = fixLocal();
+    return (M.errors || []).map(function (r) {
+      var c = Object.assign({}, r), l = L[sys + "|" + r.k];
+      if (l) { c.recv = excelDate(l.異常接收日期) || c.recv; c.prog = l.改善進度; c.desc = l.改善方式; c.fixer = l.改善人員; c.done = excelDate(l.完成改善日期 || ""); c.pending = true; }
+      c.fs = fixState(c); return c;
+    });
+  }
+  /* 依改善狀態更新本月進度：全部異常都完成改善的設備改為已點檢 */
+  function applyFix(sys) {
+    var M = S.month[sys]; if (!M || !(M.errors || []).length) return;
+    var lm = {}; M.rows.forEach(function (r) { lm[r.id] = r.loc; });
+    M.errors.forEach(function (e) { if (!e.loc) e.loc = lm[e.id] || e.area || ""; });
+    var open = {}, any = {};
+    fixRows(sys).forEach(function (e) { any[e.id] = 1; if (e.fs !== "done") (open[e.id] = open[e.id] || []).push(e); });
+    M.rows.forEach(function (r) {
+      if (!any[r.id]) return;
+      if (open[r.id]) { r.st = "ab"; r.ab = open[r.id].map(function (x) { return x.item; }).join("、"); r.fixing = open[r.id].some(function (x) { return x.fs === "doing"; }); r.fixed = false; }
+      else { if (r.st === "ab") r.st = "ok"; r.ab = ""; r.fixing = false; r.fixed = true; }
+    });
+  }
+  function fixFiltered() {
+    var f = $("rfFactory").value, s = $("rfStatus").value, q = $("rfQ").value.trim().toUpperCase();
+    var rk = { todo: 0, doing: 1, done: 2 };
+    return fixRows(S.sys).filter(function (r) {
+      if (f && f !== "all" && r.f !== f) return false;
+      if (s === "open" && r.fs === "done") return false;
+      if (s !== "open" && s !== "all" && r.fs !== s) return false;
+      if (q && [r.id, r.loc, r.item, r.note, r.desc, r.fixer, r.who].join(" ").toUpperCase().indexOf(q) < 0) return false;
+      return true;
+    }).sort(function (a, b) { return rk[a.fs] - rk[b.fs] || ((+b.key || 0) - (+a.key || 0)) || ((toDate(b.when) || 0) - (toDate(a.when) || 0)) || a.id.localeCompare(b.id); });
+  }
+  function renderFix() {
+    var box = $("rfBody"), M = S.month[S.sys]; if (!M) return;
+    var sys = S.sys, all = fixRows(sys), api = SRC[sys].fixApi, L = fixLocal();
+    var pend = Object.keys(L).filter(function (k) { return k.indexOf(sys + "|") === 0; });
+    var fsel = $("rfFactory"), fv = fsel.value, fs = {};
+    all.forEach(function (r) { fs[r.f] = 1; });
+    fsel.textContent = ""; fsel.appendChild(el("option", { value: "all", text: "全部廠區" }));
+    Object.keys(fs).sort().forEach(function (k) { fsel.appendChild(el("option", { value: k, text: FACT[k] || k })); });
+    if (fs[fv]) fsel.value = fv;
+    box.textContent = "";
+    if (!api) box.appendChild(el("div", { class: "rec-msg", style: "background:#fdf1dc;border-color:#f3d9a8;color:#7a4800" }, [
+      el("b", { text: "改善內容目前只會存在這台裝置，還不會寫回 Excel。" }),
+      el("div", { text: "在 Power Automate 建好「寫入改善內容」流程，把網址貼到這個檔案的 fixApi 後，存在本機的改善內容可以一鍵上傳。" })
+    ]));
+    else if (pend.length) box.appendChild(el("div", { class: "rec-msg", style: "display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:#fdf1dc;border-color:#f3d9a8;color:#7a4800" }, [
+      el("b", { style: "flex:1 1 200px", text: "這台裝置有 " + pend.length + " 筆改善內容還沒寫回 Excel。" }),
+      el("button", { type: "button", class: "rbtn ghost", id: "rfDrop", text: "刪除暫存" }),
+      el("button", { type: "button", class: "rbtn", id: "rfSync", text: "上傳到 Excel" })
+    ]));
+    if (!SRC[sys].fixListApi) box.appendChild(el("div", { class: "rec-msg", style: "background:#fdf1dc;border-color:#f3d9a8;color:#7a4800", text: "目前只顯示讀取流程帶出的未完成異常。接上「讀取異常專區」流程（fixListApi）後，會列出異常專區的全部異常。" }));
+    if (M.listErr) box.appendChild(el("div", { class: "rec-msg err", text: "讀不到異常專區（" + M.listErr + "），先顯示未完成的異常。" }));
+    if (!M.hasErr) { box.appendChild(el("div", { class: "rec-msg", text: "讀取網址沒有回傳異常清單（errorList），所以這裡沒有可改善的項目。" })); box.appendChild(diagBox(sys)); return; }
+    var c = { todo: 0, doing: 0, done: 0 }; all.forEach(function (r) { c[r.fs]++; });
+    var cur = $("rfStatus").value;
+    function kbtn(v, cls, label, n) {
+      return el("button", { type: "button", class: "kpi fx-k " + cls, "data-fxs": v, "aria-pressed": String(cur === v) }, [el("span", { text: label }), el("b", { text: String(n) })]);
+    }
+    box.appendChild(el("div", { class: "kpis" }, [
+      kbtn("all", "", "全部異常", all.length), kbtn("todo", "no", "待改善", c.todo), kbtn("doing", "ab", "改善中", c.doing), kbtn("done", "ok", "已完成改善", c.done)
+    ]));
+    var rows = fixFiltered();
+    if (!rows.length) { box.appendChild(el("div", { class: "rec-msg", text: all.length ? "沒有符合條件的異常。" : "目前沒有異常紀錄。" })); box.appendChild(diagBox(sys)); return; }
+    var open = rows.filter(function (r) { return r.fs !== "done"; }), done = rows.filter(function (r) { return r.fs === "done"; });
+    var now = new Date(); now.setHours(0, 0, 0, 0);
+    function daysSince(r) { var d = toDate(r.when) || toDate(r.recv); if (!d) return null; var x = new Date(d); x.setHours(0, 0, 0, 0); return Math.round((now - x) / 86400000); }
+    function secHead(title, n, note) {
+      return el("div", { class: "fx-sec" }, [el("h3", { text: title }), el("span", { class: "fx-cnt", text: String(n) }), note ? el("span", { class: "fx-note", text: note }) : null]);
+    }
+    if (open.length) {
+      box.appendChild(secHead("需要處理", open.length, "依發現時間，最久的在前面"));
+      open.sort(function (a, b) { return (daysSince(b) || 0) - (daysSince(a) || 0); });
+      var grid = el("div", { class: "fx-grid2" });
+      open.forEach(function (r) {
+        var dd = daysSince(r), late = dd != null && dd >= 30;
+        var kids = [
+          el("div", { class: "fx-h" }, [
+            el("span", { class: "id", text: r.id }),
+            el("span", { class: "st " + FXC[r.fs], text: FXN[r.fs] }),
+            dd != null ? el("span", { class: "fx-age" + (late ? " late" : ""), text: dd === 0 ? "今天發現" : "已 " + dd + " 天" }) : null
+          ]),
+          el("div", { class: "fx-sub", text: [r.key ? "#" + r.key : "", SRC[sys].types[r.t] || r.t, r.loc].filter(Boolean).join(" · ") }),
+          el("div", { class: "fx-ab" }, [el("b", { text: r.item }), r.note ? document.createTextNode("｜" + r.note) : null]),
+          el("div", { class: "fx-meta", text: "發現 " + (r.when || "—") + (r.who ? " · " + r.who : "") })
+        ];
+        if (r.desc) kids.push(el("div", { class: "fx-fix" }, [el("span", { class: "lbl", text: "改善方式" }), el("span", { class: "txt", text: r.desc }),
+          el("div", { class: "fx-meta", text: [r.recv ? "接收 " + r.recv : "", r.fixer ? "改善人員 " + r.fixer : ""].filter(Boolean).join(" · ") })]));
+        if (r.pending) kids.push(el("div", { style: "display:flex;gap:8px;align-items:center;flex-wrap:wrap" }, [el("span", { class: "fx-pend", text: "存在本機，尚未寫回 Excel" }), el("button", { type: "button", class: "rbtn ghost sm", "data-fxdrop": r.k, text: "刪除這筆暫存" })]));
+        kids.push(el("div", { class: "fx-act" }, [el("button", { type: "button", class: "rbtn", "data-fixk": r.k, text: r.fs === "todo" ? "填寫改善內容" : "更新改善進度" })]));
+        grid.appendChild(el("div", { class: "fx-card " + r.fs }, kids));
+      });
+      box.appendChild(grid);
+    } else if (cur !== "done") {
+      box.appendChild(el("div", { class: "fx-allok", text: "✓ 目前沒有待改善的異常" }));
+    }
+    if (done.length) {
+      box.appendChild(secHead("已完成改善", done.length, "已結案，僅供查閱"));
+      var tb = el("tbody");
+      done.forEach(function (r) {
+        tb.appendChild(el("tr", null, [
+          el("td", { class: "mono muted", text: r.key ? "#" + r.key : "" }),
+          el("td", null, [el("div", { class: "mono", style: "font-weight:700", text: r.id }), el("div", { class: "fx-meta", text: r.loc || "" })]),
+          el("td", { text: r.item }),
+          el("td", { class: "mono", text: (r.when || "").replace(/\s.*$/, "") }),
+          el("td", null, [el("div", { text: r.desc || "—" }), r.fixer ? el("div", { class: "fx-meta", text: r.fixer }) : null]),
+          el("td", { class: "mono", text: r.done || "" })
+        ]));
+      });
+      box.appendChild(el("div", { class: "tbox fx-done" }, [el("table", null, [el("thead", null, [el("tr", null, ["序號", "設備", "異常項目", "發現", "改善方式／人員", "完成日期"].map(function (h) { return el("th", { text: h }); }))]), tb])]));
+    }
+    box.appendChild(el("div", { class: "rec-meta", text: staleNote(M) }));
+    box.appendChild(diagBox(sys));
+  }
+
+  /* 改善表單 */
+  var FX = { cur: null, prog: "處理中", photo: null };
+  var CHIPS = {
+    DCP: ["通知庭維請廠商做更換", "采瑩消防做更換", "更換備品滅火器", "已補上滅火器", "已補上安全插銷", "已清除前方雜物"],
+    CO2: ["通知庭維請廠商做更換", "更換備品滅火器", "已送廠商秤重補充", "已補貼重量標示", "已補上安全插銷", "已清除前方雜物"],
+    FH: ["已清除箱門前雜物", "已更換水帶", "已修復箱門", "已請廠商修繕漏水", "已潤滑水瞄"],
+    EP: ["已重新固定支架", "已更換繩索", "已補貼操作說明", "已清除下降空間障礙"],
+    WD: ["已清潔出水口", "已疏通接水盤", "已請廠商維修", "已更換濾心"]
+  };
+  function toInputDate(s) { var m = String(s || "").match(/(\d{4})\D(\d{1,2})\D(\d{1,2})/); return m ? m[1] + "-" + String(m[2]).padStart(2, "0") + "-" + String(m[3]).padStart(2, "0") : ""; }
+  function fromInputDate(v) { return v ? v.replace(/-/g, "/") : ""; }
+  function today() { var d = new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
+  function nowStr() { var d = new Date(), p = function (n) { return String(n).padStart(2, "0"); }; return d.getFullYear() + "/" + p(d.getMonth() + 1) + "/" + p(d.getDate()) + " " + p(d.getHours()) + ":" + p(d.getMinutes()); }
+  function curUser() { try { var u = JSON.parse(sessionStorage.getItem("ehs_portal_user") || "null") || JSON.parse(localStorage.getItem("ehs_portal_user") || "null"); if (u && u.name) return u; } catch (e) {} return { name: "", dept: "" }; }
+  function setProg(p) {
+    FX.prog = p;
+    $("fxP1").setAttribute("aria-pressed", String(p === "處理中")); $("fxP2").setAttribute("aria-pressed", String(p === "已完成"));
+    $("fxDoneL").style.display = p === "已完成" ? "" : "none";
+    if (p === "已完成" && !$("fxDone").value) $("fxDone").value = today();
+  }
+  function openFix(r) {
+    FX.cur = r; FX.photo = null;
+    $("fxInfo").textContent = "";
+    [el("b", { text: r.id + "　" + (SRC[S.sys].types[r.t] || r.t) }), el("br"),
+     document.createTextNode((r.loc ? "位置：" + r.loc + "　" : "") + "發現：" + (r.when || "—") + (r.who ? "（" + r.who + "）" : "")), el("br"),
+     document.createTextNode("異常：" + r.item + (r.note ? "｜" + r.note : ""))].forEach(function (n) { $("fxInfo").appendChild(n); });
+    $("fxRecv").value = toInputDate(r.recv) || today();
+    $("fxDone").value = toInputDate(r.done);
+    $("fxDesc").value = r.desc || "";
+    $("fxWho").value = r.fixer || curUser().name;
+    $("fxPhoto").value = ""; $("fxPrev").classList.add("hidden"); $("fxPrev").removeAttribute("src");
+    $("fxErr").textContent = "";
+    var ch = $("fxChips"); ch.textContent = "";
+    (CHIPS[r.t] || []).forEach(function (t) { ch.appendChild(el("button", { type: "button", "data-chip": t, text: "＋" + t })); });
+    setProg(r.fs === "done" ? "已完成" : "處理中");
+    $("fxSave").disabled = false; $("fxSave").textContent = "儲存改善內容";
+    $("fixDlg").classList.remove("hidden"); $("fxDesc").focus();
+  }
+  function closeFix() { $("fixDlg").classList.add("hidden"); FX.cur = null; }
+  function compressPhoto(file) {
+    return new Promise(function (ok, no) {
+      var rd = new FileReader();
+      rd.onerror = no;
+      rd.onload = function () {
+        var img = new Image();
+        img.onerror = no;
+        img.onload = function () {
+          var max = 1280, w = img.width, h = img.height, sc = Math.min(1, max / Math.max(w, h));
+          var cv = document.createElement("canvas"); cv.width = Math.round(w * sc); cv.height = Math.round(h * sc);
+          var cx = cv.getContext("2d"); cx.fillStyle = "#fff"; cx.fillRect(0, 0, cv.width, cv.height); cx.drawImage(img, 0, 0, cv.width, cv.height);
+          ok(cv.toDataURL("image/jpeg", 0.72));
+        };
+        img.src = rd.result;
+      };
+      window.prepImageFile(file).then(function (f) { rd.readAsDataURL(f); }).catch(no);
+    });
+  }
+  async function postFix(api, payload) {
+    var ctrl = new AbortController(), timer = setTimeout(function () { ctrl.abort(); }, 30000);
+    try {
+      var res = await fetch(api, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload), signal: ctrl.signal });
+      if (!res.ok) { var t = ""; try { t = await res.text(); } catch (e) {} throw new Error("伺服器回應 " + res.status + (t ? "：" + t.slice(0, 120) : "")); }
+    } catch (e) {
+      if (e.name === "AbortError") throw new Error("等候超過 30 秒，Excel 可能被鎖定或流程太慢");
+      if (e instanceof TypeError) throw new Error("連不到 Power Automate（" + e.message + "）");
+      throw e;
+    } finally { clearTimeout(timer); }
+  }
+  function toast(msg) {
+    var t = el("div", { class: "fx-toast", role: "status", text: msg }); document.body.appendChild(t);
+    setTimeout(function () { t.remove(); }, 3500);
+  }
+  function afterFixChange(sys) { applyFix(sys); if (S.sys !== sys) return; if (S.view === "fix") renderFix(); else if (S.view === "month") renderMonth(); }
+  function mergeCloud(sys, payload) {
+    var M = S.month[sys]; if (!M) return;
+    (M.errors || []).forEach(function (r) {
+      if (r.k !== payload._k) return;
+      r.prog = payload.改善進度; r.recv = payload.異常接收日期; r.desc = payload.改善方式; r.fixer = payload.改善人員; r.done = payload.完成改善日期;
+      if (payload.改善照片檔名) r.photo = payload.改善照片檔名;
+    });
+  }
+  async function submitFix(ev) {
+    ev.preventDefault();
+    var r = FX.cur, sys = S.sys; if (!r) return;
+    var desc = $("fxDesc").value.trim(), who = $("fxWho").value.trim(), recv = $("fxRecv").value, done = FX.prog === "已完成" ? $("fxDone").value : "";
+    if (!desc) { $("fxErr").textContent = "請填寫改善方式。"; $("fxDesc").focus(); return; }
+    if (!who) { $("fxErr").textContent = "請填寫改善人員。"; $("fxWho").focus(); return; }
+    if (FX.prog === "已完成" && !done) { $("fxErr").textContent = "請選擇完成改善日期。"; $("fxDone").focus(); return; }
+    if (done && recv && done < recv) { $("fxErr").textContent = "完成改善日期不能早於異常接收日期。"; return; }
+    if (done && done > today()) { $("fxErr").textContent = "完成改善日期不能晚於今天。"; return; }
+    var u = curUser(), stampNow = nowStr();
+    var payload = {
+      _k: r.k, 系統: SRC[sys].name, 序號: r.key || "", 設備編號: r.id, 填寫異常日期: r.when, 異常項目: r.item, 廠區位置: r.area || "",
+      異常接收日期: fromInputDate(recv), 改善方式: desc, 完成改善日期: fromInputDate(done), 改善人員: who, 改善進度: FX.prog,
+      填寫人: u.name, 填寫部門: u.dept, 填寫時間: stampNow, 改善照片檔名: "", photoBase64: ""
+    };
+    if (FX.photo) { payload.改善照片檔名 = r.id + "_改善_" + stampNow.replace(/\D/g, "") + ".jpg"; payload.photoBase64 = FX.photo.split(",")[1] || ""; }
+    var api = SRC[sys].fixApi, L = fixLocal(), lk = sys + "|" + r.k;
+    $("fxSave").disabled = true; $("fxSave").textContent = "儲存中…"; $("fxErr").textContent = "";
+    if (api) {
+      try {
+        await postFix(api, payload);
+        delete L[lk]; fixLocalSave(L); mergeCloud(sys, payload); try { localStorage.removeItem(CACHE_KEY + sys); } catch (e) {}
+        closeFix(); afterFixChange(sys); toast("✅ 已寫回 Excel：" + r.id + "（" + FX.prog + "）"); return;
+      } catch (e) {
+        $("fxSave").disabled = false; $("fxSave").textContent = "儲存改善內容";
+        if (!confirm("寫回 Excel 失敗（" + (e.message || e) + "）。\n\n要先存在這台裝置，之後再上傳嗎？")) { $("fxErr").textContent = "寫回失敗：" + (e.message || e); return; }
+      }
+    }
+    L[lk] = payload; var okPhoto = fixLocalSave(L);
+    closeFix(); afterFixChange(sys);
+    toast("💾 已存在本機" + (okPhoto ? "" : "（照片太大沒有存）") + "：" + r.id + "，尚未寫回 Excel");
+  }
+  async function syncFix() {
+    var sys = S.sys, api = SRC[sys].fixApi; if (!api) return;
+    var L = fixLocal(), keys = Object.keys(L).filter(function (k) { return k.indexOf(sys + "|") === 0; }), ok = 0, fail = "";
+    var b = $("rfSync"); if (b) { b.disabled = true; b.textContent = "上傳中…"; }
+    for (var i = 0; i < keys.length; i++) {
+      try { await postFix(api, L[keys[i]]); mergeCloud(sys, L[keys[i]]); delete L[keys[i]]; fixLocalSave(L); ok++; }
+      catch (e) { fail = e.message || String(e); break; }
+    }
+    afterFixChange(sys);
+    toast(fail ? "已上傳 " + ok + " 筆，其餘失敗：" + fail : "✅ 已上傳 " + ok + " 筆改善內容到 Excel");
+  }
+  $("fxForm").addEventListener("submit", submitFix);
+  $("fxCancel").addEventListener("click", closeFix);
+  $("fixDlg").addEventListener("click", function (e) { if (e.target === $("fixDlg")) closeFix(); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !$("fixDlg").classList.contains("hidden")) closeFix(); });
+  $("fxP1").addEventListener("click", function () { setProg("處理中"); });
+  $("fxP2").addEventListener("click", function () { setProg("已完成"); });
+  $("fxChips").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-chip]"); if (!b) return;
+    var t = $("fxDesc"), v = t.value.trim(), add = b.getAttribute("data-chip");
+    t.value = v ? (/[。，、；\s]$/.test(v) ? v : v + "，") + add : add; t.focus();
+  });
+  $("fxPhoto").addEventListener("change", function (e) {
+    var f = e.target.files && e.target.files[0]; FX.photo = null; $("fxPrev").classList.add("hidden");
+    if (!f) return;
+    compressPhoto(f).then(function (d) { FX.photo = d; $("fxPrev").src = d; $("fxPrev").classList.remove("hidden"); })
+      .catch(function () { $("fxErr").textContent = "這張照片讀不出來，請改用 JPG 或 PNG 照片。"; });
+  });
+  document.addEventListener("click", function (e) {
+    if (!e.target.closest) return;
+    var b = e.target.closest("button[data-fixk]");
+    if (b) { var k = b.getAttribute("data-fixk"), r = fixRows(S.sys).filter(function (x) { return x.k === k; })[0]; if (r && r.fs !== "done") openFix(r); return; }
+    var m = e.target.closest("button[data-fixid]");
+    if (m) {
+      var id = m.getAttribute("data-fixid"), cand = fixRows(S.sys).filter(function (x) { return x.id === id && x.fs !== "done"; });
+      if (cand.length === 1) openFix(cand[0]);
+      else if (cand.length > 1) { S.view = "fix"; $("rfStatus").value = "open"; $("rfQ").value = id; paint(); }
+      return;
+    }
+    if (e.target.id === "rfSync") syncFix();
+    if (e.target.id === "rfDrop" || e.target.closest("button[data-fxdrop]")) {
+      var one = e.target.closest("button[data-fxdrop]"), L0 = fixLocal(), sys1 = S.sys;
+      var ks = one ? [sys1 + "|" + one.getAttribute("data-fxdrop")] : Object.keys(L0).filter(function (k) { return k.indexOf(sys1 + "|") === 0; });
+      if (!confirm("要刪除 " + ks.length + " 筆存在這台裝置、還沒寫回 Excel 的改善內容嗎？\n（只刪除暫存，不會動到 Excel）")) return;
+      ks.forEach(function (k) { delete L0[k]; }); fixLocalSave(L0); afterFixChange(sys1); toast("已刪除 " + ks.length + " 筆暫存");
+    }
+    var kb = e.target.closest("button[data-fxs]");
+    if (kb) { $("rfStatus").value = kb.getAttribute("data-fxs"); renderFix(); }
+  });
+  $("rfFactory").addEventListener("change", renderFix);
+  $("rfStatus").addEventListener("change", renderFix);
+  $("rfQ").addEventListener("input", renderFix);
+  $("rfReload").addEventListener("click", function () { loadMonth(true); });
+  $("rfExport").addEventListener("click", function () {
+    var rows = fixFiltered(); if (!rows.length) return;
+    exportAoa(SRC[S.sys].name + "異常改善紀錄_" + stamp(), [["序號", "設備編號", "廠區", "類型", "位置", "填寫異常日期", "檢查員", "異常項目", "補充說明", "改善狀態", "異常接收日期", "改善方式", "完成改善日期", "改善人員", "備註"]].concat(rows.map(function (r) {
+      return [r.key, r.id, FACT[r.f] || r.f, SRC[S.sys].types[r.t] || r.t, r.loc, r.when, r.who, r.item, r.note, FXN[r.fs], r.recv, r.desc, r.done, r.fixer, r.pending ? "存在本機，尚未寫回 Excel" : ""];
+    })));
+  });
+
   /* ---------- 切換 ---------- */
   function paint() {
     $("rtFire").setAttribute("aria-selected", String(S.sys === "fire"));
@@ -2597,14 +3172,19 @@ function loadOneDriveImage(imgElementId, fileName) {
     $("planBar").classList.toggle("hidden", S.sys !== "fire");
     $("rvQual").setAttribute("aria-pressed", String(S.view === "qual"));
     $("recQual").classList.toggle("hidden", S.view !== "qual");
+    if (!SRC[S.sys].fix && S.view === "fix") S.view = "month";
+    $("rvFix").hidden = !SRC[S.sys].fix;
+    $("rvFix").setAttribute("aria-pressed", String(S.view === "fix"));
+    $("recFix").classList.toggle("hidden", S.view !== "fix");
     $("rvItems").setAttribute("aria-pressed", String(S.view === "items"));
     $("recItems").classList.toggle("hidden", S.view !== "items");
     $("recMonth").classList.toggle("hidden", S.view !== "month");
     $("recHist").classList.toggle("hidden", S.view !== "hist");
     S.limit = 200;
-    if (S.view === "month") { if (S.month[S.sys]) { fillMonthFilters(); renderMonth(); } else loadMonth(); }
+    if (S.view === "month") loadMonth();
     else if (S.view === "items") renderItems();
-    else if (S.view === "qual") { if (S.month.water) renderQual(); else loadMonth().then(renderQual); }
+    else if (S.view === "fix") loadMonth();
+    else if (S.view === "qual") loadMonth();
     else renderHist();
   }
   window.openRecords = function (view, sys) {
@@ -2619,6 +3199,7 @@ function loadOneDriveImage(imgElementId, fileName) {
   $("rvHist").addEventListener("click", function () { S.view = "hist"; paint(); });
   $("rvQual").addEventListener("click", function () { S.view = "qual"; paint(); });
   $("rvItems").addEventListener("click", function () { S.view = "items"; paint(); });
+  $("rvFix").addEventListener("click", function () { S.view = "fix"; paint(); });
   $("rqFactory").addEventListener("change", function () { renderQual(); });
   $("rqQ").addEventListener("input", function () { renderQual(); });
   $("rqReload").addEventListener("click", function () { loadMonth(true); });
@@ -2657,6 +3238,64 @@ function loadOneDriveImage(imgElementId, fileName) {
       var a = [r.id, FACT[r.f] || r.f, r.fl, SRC[S.sys].types[r.t] || r.t, r.loc, STN[r.st], r.who, r.when, r.ab]; if (isFire) a.push(r.exp); return a;
     })));
   });
+  /* ---------- 各廠點檢報表（列印／另存 PDF） ---------- */
+  function hx(v) { return String(v == null ? "" : v).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function printReport() {
+    var M = S.month[S.sys]; if (!M) { alert("資料還沒讀取完成。"); return; }
+    var sys = S.sys, src = SRC[sys], ym = selYM(), isFire = sys === "fire";
+    var rows = scopeRows(viewRows() || M.rows);
+    if (!rows.length) { alert("目前的篩選條件沒有設備。"); return; }
+    var y = +ym.split("-")[0], mo = +ym.split("-")[1] - 1;
+    var fx = isFire && src.fix ? fixRows(sys) : [];
+    var groups = {}; rows.forEach(function (r) { (groups[r.f] = groups[r.f] || []).push(r); });
+    var comp = (typeof CONFIG !== "undefined" && CONFIG.company) || "", org = (typeof CONFIG !== "undefined" && CONFIG.orgName) || "";
+    var t = $("rmType").value, fl = $("rmFloor").value;
+    var scopeNote = [t && t !== "all" ? (src.types[t] || t) : "", fl && fl !== "all" ? (fl === "none" ? "未註記樓層" : fl) : ""].filter(Boolean).join("、");
+    var now = new Date(), p2 = function (n) { return String(n).padStart(2, "0"); };
+    var printed = now.getFullYear() + "/" + p2(now.getMonth() + 1) + "/" + p2(now.getDate()) + " " + p2(now.getHours()) + ":" + p2(now.getMinutes());
+    var pages = Object.keys(groups).sort().map(function (f) {
+      var g = groups[f].slice().sort(function (a, b) { return floorRank(a.fl) - floorRank(b.fl) || a.id.localeCompare(b.id); });
+      var c = { ok: 0, no: 0, ab: 0 }; g.forEach(function (r) { c[r.st]++; });
+      var pct = g.length ? Math.round((c.ok + c.ab) / g.length * 100) : 0;
+      var head = ["#", "設備編號", "類型", "樓層", "位置", "結果", "檢查員", "點檢時間", "異常項目"]; if (isFire) head.push("效期");
+      var body = g.map(function (r, i) {
+        var st = r.st === "ok" ? "正常" : r.st === "ab" ? "異常" : "未點檢";
+        var cells = [i + 1, r.id, src.types[r.t] || r.t, r.fl || "", r.loc || "", st, r.who || "", r.when || "", r.ab || ""]; if (isFire) cells.push(r.exp || "");
+        return "<tr class='" + r.st + "'>" + cells.map(function (v, j) { return "<td" + (j === 5 ? " class='st'" : "") + ">" + hx(v) + "</td>"; }).join("") + "</tr>";
+      }).join("");
+      var fxs = fx.filter(function (e) {
+        if (e.f !== f) return false;
+        var d = toDate(e.when) || toDate(e.recv);
+        return e.fs !== "done" || (d && d.getFullYear() === y && d.getMonth() === mo) || ((toDate(e.done) || {}).getMonth && toDate(e.done).getFullYear() === y && toDate(e.done).getMonth() === mo);
+      });
+      var fxHtml = isFire && src.fix ? "<h3>異常及改善追蹤</h3>" + (fxs.length ? "<table><thead><tr><th>序號</th><th>設備編號</th><th>異常項目</th><th>發現日期</th><th>接收日期</th><th>改善方式</th><th>完成日期</th><th>改善人員</th><th>狀態</th></tr></thead><tbody>" +
+        fxs.map(function (e) { return "<tr><td>" + hx(e.key) + "</td><td>" + hx(e.id) + "</td><td>" + hx(e.item + (e.note ? "｜" + e.note : "")) + "</td><td>" + hx((e.when || "").replace(/\s.*$/, "")) + "</td><td>" + hx(e.recv) + "</td><td>" + hx(e.desc) + "</td><td>" + hx(e.done) + "</td><td>" + hx(e.fixer) + "</td><td>" + hx(FXN[e.fs]) + "</td></tr>"; }).join("") +
+        "</tbody></table>" : "<p class='none'>本月此廠區無異常紀錄。</p>") : "";
+      return "<section class='page'>" +
+        "<header><div class='co'>" + hx(comp) + "　" + hx(org) + "</div><h1>" + hx(src.name) + "設備點檢紀錄表</h1>" +
+        "<div class='meta'><span>廠區：<b>" + hx(FACT[f] || f) + "</b></span><span>月份：<b>" + hx(ymLabel(ym)) + "</b></span>" + (scopeNote ? "<span>範圍：<b>" + hx(scopeNote) + "</b></span>" : "") + "<span>列印：" + hx(printed) + "</span></div></header>" +
+        "<div class='sum'><div><span>設備總數</span><b>" + g.length + "</b></div><div><span>已點檢</span><b>" + (c.ok + c.ab) + "</b></div><div><span>未點檢</span><b class='r'>" + c.no + "</b></div><div><span>異常</span><b class='a'>" + c.ab + "</b></div><div><span>完成率</span><b>" + pct + "%</b></div></div>" +
+        "<h3>點檢明細</h3><table><thead><tr>" + head.map(function (h) { return "<th>" + h + "</th>"; }).join("") + "</tr></thead><tbody>" + body + "</tbody></table>" +
+        fxHtml +
+        "<div class='sign'><div>單位主管</div><div>職安衛人員</div></div></section>";
+    }).join("");
+    var css = "@page{size:A4 portrait;margin:12mm 10mm}*{box-sizing:border-box}body{margin:0;font-family:'Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif;color:#17211c;font-size:11px;-webkit-print-color-adjust:exact;print-color-adjust:exact}" +
+      ".bar{position:sticky;top:0;background:#1f3a5a;color:#fff;padding:10px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;font-size:14px}.bar button{font:inherit;font-weight:700;border:0;border-radius:8px;padding:8px 14px;background:#fff;color:#1f3a5a;cursor:pointer}" +
+      ".page{padding:16px 20px;max-width:900px;margin:0 auto}.page+.page{break-before:page;page-break-before:always}header{border-bottom:2px solid #1f3a5a;padding-bottom:8px;margin-bottom:10px}.co{font-size:11px;color:#55625b}h1{font-size:20px;margin:4px 0 6px}" +
+      ".meta{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:12px}.sum{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid #c9d3cd;border-radius:6px;margin:10px 0}.sum div{padding:6px 10px;border-right:1px solid #e1e7e3}.sum div:last-child{border:0}.sum span{display:block;font-size:10.5px;color:#55625b}.sum b{font-size:17px}.sum b.r{color:#b42318}.sum b.a{color:#9a5b00}" +
+      "h3{font-size:13px;margin:14px 0 6px;padding-left:6px;border-left:3px solid #1f3a5a}table{width:100%;border-collapse:collapse}th,td{border:1px solid #c9d3cd;padding:3px 5px;text-align:left;vertical-align:top}th{background:#eef2f0;font-weight:700;white-space:nowrap}tr{break-inside:avoid}" +
+      "tr.no td.st{color:#b42318;font-weight:700}tr.ab td{background:#fdf6e9}tr.ab td.st{color:#9a5b00;font-weight:700}.none{color:#55625b}" +
+      ".sign{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:20px;break-inside:avoid}.sign div{border:1px solid #c9d3cd;height:64px;padding:4px 8px;font-size:11px;color:#55625b}" +
+      "@media print{.bar{display:none}.page{padding:0;max-width:none}}";
+    var title = src.name + "點檢報表_" + ym.replace("-", "") + (Object.keys(groups).length === 1 ? "_" + (FACT[Object.keys(groups)[0]] || Object.keys(groups)[0]).replace(/\s/g, "") : "_各廠");
+    var html = "<!doctype html><html lang='zh-Hant'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>" + hx(title) + "</title><style>" + css + "</style></head><body>" +
+      "<div class='bar'><button type='button' onclick='window.print()'>列印／另存為 PDF</button><span>在列印視窗的「目的地」選「另存為 PDF」即可下載。共 " + Object.keys(groups).length + " 個廠區，每個廠區一頁起。</span></div>" + pages + "</body></html>";
+    var w = window.open("", "_blank");
+    if (!w) { alert("瀏覽器擋住了新視窗，請允許此網站開啟彈出式視窗後再試一次。"); return; }
+    w.document.open(); w.document.write(html); w.document.close();
+    setTimeout(function () { try { w.focus(); w.print(); } catch (e) {} }, 500);
+  }
+  $("rmPdf").addEventListener("click", printReport);
   $("rhExport").addEventListener("click", function () {
     var rows = histFiltered(); if (!rows.length) return;
     exportAoa(SRC[S.sys].name + "點檢紀錄_" + stamp(), [["點檢時間", "設備編號", "位置", "檢查員", "結果", "作業類別", "異常說明"]].concat(rows.map(function (r) {
@@ -2674,12 +3313,13 @@ function loadOneDriveImage(imgElementId, fileName) {
 /* ===== LINE 圖文選單直達：網址後面加 #ehs、#fire、#water ===== */
 (function () {
   var want = (location.hash || "").replace("#", "").toLowerCase();
-  if (["ehs", "fire", "water"].indexOf(want) < 0) return;
+  if (["ehs", "fire", "water", "fix"].indexOf(want) < 0) return;
   function go() {
     if (!want || document.getElementById("home").classList.contains("hidden")) return; /* 還沒填身分：填完再跳 */
     var h = want; want = "";
     history.replaceState(null, "", location.pathname + location.search);
     if (h === "ehs") document.getElementById("tEhs").click();
+    else if (h === "fix") window.openRecords("fix", "fire");
     else window.openRecords("month", h);
   }
   document.getElementById("signForm").addEventListener("submit", function () { setTimeout(go, 0); });
