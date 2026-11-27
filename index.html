@@ -21,8 +21,10 @@
       water:  "https://amyjacky1938-star.github.io/water-check/",
       health: "https://claude.ai/artifact/X3Dc41ccjH2VcHfgcF5q2Q",
       paper:  "https://claude.ai/artifact/B5tcRNnaer7bEhuSWWqA6o",   // 管理部：影印紙統計系統
-      mail:   "https://claude.ai/artifact/MsV4qyhg33SXRRcZ6c3Ddw"    // 管理部：掛號信簽收簿
+      mail:   "https://claude.ai/artifact/MsV4qyhg33SXRRcZ6c3Ddw",   // 管理部：掛號信簽收簿
+      patrol: "https://claude.ai/artifact/Wehe4kdcKi7yH774cPmm5R"    // 勞安室：廠區衛生巡查紀錄表
     },
+    patrolDepts: ["勞安室", "管理部", "集團管理處"],   // 哪些部門看得到「廠區衛生巡查紀錄表」；留空 [] 代表所有人都看得到
     adminDepts: ["管理部", "勞安室", "集團管理處"],   // 哪些部門登入後看得到「管理部專區」
     healthDepts: ["勞安室"],                          // 哪些部門登入後看得到「健康檢查資料中心」
     depts: ["勞安室","管理部","製造一部","製造二部","製造三部","光纖業務部","研發一部","研發二部","研發三部","研發四部",
@@ -127,6 +129,10 @@
   .tile.admin .txt { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
   .tile.admin .lock { color: #0d5f73; background: #e2f0f4; }
   .lock { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; color: var(--health); background: var(--health-soft); border-radius: 999px; padding: 3px 9px; align-self: flex-start; }
+  .tile.patrol { grid-column: 1 / -1; min-height: 0; flex-direction: row; align-items: center; gap: 14px; border-color: #c3cdea; }
+  .tile.patrol .ic { background: #e6ebf8; color: #1f3b8c; flex-shrink: 0; }
+  .tile.patrol .txt { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .tile.patrol .lock { color: #1f3b8c; background: #e6ebf8; }
   .tile.off { opacity: .55; }
   .tile.off small { color: var(--muted); }
   footer { text-align: center; font-size: 12px; color: var(--muted); margin-top: 28px; }
@@ -449,6 +455,15 @@
         <span class="ic" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M9 10h6M9 14h6M9 18h3"/></svg></span>
         <b data-t="rec">點檢紀錄與項目</b>
         <small data-t="recSub">本月進度、歷史紀錄、點檢項目一覽</small>
+      </a>
+
+      <a class="tile patrol hidden" id="tPatrol" href="#" target="_blank" rel="noopener">
+        <span class="ic" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1"/><path d="M9 11l2 2 4-4"/><path d="M9 17h6"/></svg></span>
+        <span class="txt">
+          <b data-t="patrol">廠區衛生巡查紀錄表</b>
+          <small data-t="patrolSub">J1／J2／J3 安全衛生暨 7S 巡查、主管簽核、缺失改善追蹤與報表匯出。</small>
+          <span class="lock"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span data-t="patrolTag">需另外登入</span></span>
+        </span>
       </a>
 
       <a class="tile health hidden" id="tHealth" href="#" target="_blank" rel="noopener">
@@ -2078,6 +2093,7 @@ function loadOneDriveImage(imgElementId, fileName) {
       healthSub: "員工健檢判讀、異常追蹤與年度統計。含個人健康資料，僅限職安衛人員使用。", lockTag: "勞安室專用｜需另外登入",
       paper: "管理部｜影印紙統計系統", paperSub: "各部門影印／列印張數、費用分攤、月報與同期比較。", paperTag: "管理部專用｜需另外登入",
       mail: "管理部｜掛號信簽收簿", mailSub: "掛號信登記、同事到管理部領取時手寫簽收、各部門統計與簽收單匯出。",
+      patrol: "廠區衛生巡查紀錄表", patrolSub: "J1／J2／J3 安全衛生暨 7S 巡查、主管簽核、缺失改善追蹤與報表匯出。", patrolTag: "需另外登入",
       needName: "請填寫姓名", hi: "你好，"
     },
     th: {
@@ -2093,6 +2109,7 @@ function loadOneDriveImage(imgElementId, fileName) {
       healthSub: "ข้อมูลสุขภาพพนักงาน เฉพาะเจ้าหน้าที่ความปลอดภัย", lockTag: "เฉพาะฝ่ายความปลอดภัย｜เข้าสู่ระบบแยก",
       paper: "ฝ่ายบริหาร｜สถิติกระดาษถ่ายเอกสาร", paperSub: "จำนวนการถ่ายเอกสาร/พิมพ์ของแต่ละแผนก ค่าใช้จ่าย และรายงานรายเดือน", paperTag: "เฉพาะฝ่ายบริหาร｜เข้าสู่ระบบแยก",
       mail: "ฝ่ายบริหาร｜สมุดรับจดหมายลงทะเบียน", mailSub: "บันทึกจดหมายลงทะเบียน เซ็นรับที่ฝ่ายบริหาร สถิติแต่ละแผนก",
+      patrol: "บันทึกการตรวจความปลอดภัยในโรงงาน", patrolSub: "ตรวจความปลอดภัยและ 7S ของ J1／J2／J3 ผู้จัดการลงนาม ติดตามการแก้ไขข้อบกพร่อง", patrolTag: "เข้าสู่ระบบแยก",
       needName: "กรุณาใส่ชื่อ", hi: ""
     }
   };
@@ -2127,6 +2144,7 @@ function loadOneDriveImage(imgElementId, fileName) {
     $("tHealth").href = CONFIG.links.health;
     if (CONFIG.links.paper) $("tPaper").href = CONFIG.links.paper;
     if (CONFIG.links.mail) $("tMail").href = CONFIG.links.mail;
+    if (CONFIG.links.patrol) $("tPatrol").href = CONFIG.links.patrol;
   }
 
   function show(u) {
@@ -2141,6 +2159,9 @@ function loadOneDriveImage(imgElementId, fileName) {
     /* 管理部專區：只有 CONFIG.adminDepts 裡的部門看得到 */
     $("tPaper").classList.toggle("hidden", !(CONFIG.links.paper && (CONFIG.adminDepts || []).indexOf(u.dept) >= 0));
     $("tMail").classList.toggle("hidden", !(CONFIG.links.mail && (CONFIG.adminDepts || []).indexOf(u.dept) >= 0));
+    /* 廠區衛生巡查紀錄表：CONFIG.patrolDepts 留空代表所有人都看得到 */
+    var pd = CONFIG.patrolDepts || [];
+    $("tPatrol").classList.toggle("hidden", !(CONFIG.links.patrol && (pd.length === 0 || pd.indexOf(u.dept) >= 0)));
     $("foot").textContent = "© " + CONFIG.company + " " + CONFIG.orgName;
     $("signin").classList.add("hidden"); $("home").classList.remove("hidden");
     setTimeout(function () { if (window.recPrefetch) window.recPrefetch(); }, 300);   /* 背景先讀消防資料 */
@@ -2815,12 +2836,33 @@ function loadOneDriveImage(imgElementId, fileName) {
   function loadXlsx() {
     if (window.XLSX) return Promise.resolve();
     if (xlsxLoading) return xlsxLoading;
+    /* 先載入可設定字型的 xlsx-js-style；載不到再用原本的 SheetJS（無法設定字型） */
+    var urls = [
+      "https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"
+    ];
     xlsxLoading = new Promise(function (ok, no) {
-      var s = document.createElement("script");
-      s.src = "https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js";
-      s.onload = ok; s.onerror = function () { xlsxLoading = null; no(); }; document.head.appendChild(s);
+      (function tryNext(i) {
+        if (i >= urls.length) { xlsxLoading = null; no(); return; }
+        var s = document.createElement("script");
+        s.src = urls[i];
+        s.onload = function () { window.XLSX ? ok() : tryNext(i + 1); };
+        s.onerror = function () { s.remove(); tryNext(i + 1); };
+        document.head.appendChild(s);
+      })(0);
     });
     return xlsxLoading;
+  }
+  /* Excel 全部儲存格套用標楷體（第一列標題加粗） */
+  var XLSX_FONT = "標楷體";
+  function applyKaiFont(ws) {
+    if (!ws["!ref"]) return;
+    var rg = XLSX.utils.decode_range(ws["!ref"]);
+    for (var R = rg.s.r; R <= rg.e.r; R++) for (var C = rg.s.c; C <= rg.e.c; C++) {
+      var addr = XLSX.utils.encode_cell({ r: R, c: C });
+      if (!ws[addr]) ws[addr] = { t: "s", v: "" };
+      ws[addr].s = { font: { name: XLSX_FONT, sz: 12, bold: R === rg.s.r }, alignment: { vertical: "top", wrapText: false } };
+    }
   }
   function saveCsv(name, aoa) {
     var csv = "﻿" + aoa.map(function (r) { return r.map(function (v) { v = v == null ? "" : String(v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(","); }).join("\r\n");
@@ -2831,7 +2873,8 @@ function loadOneDriveImage(imgElementId, fileName) {
     loadXlsx().then(function () {
       var ws = XLSX.utils.aoa_to_sheet(aoa), wb = XLSX.utils.book_new();
       ws["!cols"] = aoa[0].map(function (_, i) { return { wch: Math.min(40, Math.max.apply(null, aoa.map(function (r) { return String(r[i] || "").length * 2 + 2; }))) }; });
-      XLSX.utils.book_append_sheet(wb, ws, "紀錄"); XLSX.writeFile(wb, name + ".xlsx");
+      applyKaiFont(ws);
+      XLSX.utils.book_append_sheet(wb, ws, "紀錄"); XLSX.writeFile(wb, name + ".xlsx", { cellStyles: true });
     }).catch(function () { saveCsv(name, aoa); });
   }
   function stamp() { var d = new Date(), p = function (n) { return String(n).padStart(2, "0"); }; return d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate()); }
@@ -3279,11 +3322,11 @@ function loadOneDriveImage(imgElementId, fileName) {
         fxHtml +
         "<div class='sign'><div>單位主管</div><div>職安衛人員</div></div></section>";
     }).join("");
-    var css = "@page{size:A4 portrait;margin:12mm 10mm}*{box-sizing:border-box}body{margin:0;font-family:'Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif;color:#17211c;font-size:11px;-webkit-print-color-adjust:exact;print-color-adjust:exact}" +
+    var css = "@page{size:A4 portrait;margin:12mm 10mm}*{box-sizing:border-box}body{margin:0;font-family:'標楷體','DFKai-SB','BiauKai','TW-Kai','KaiTi','STKaiti',serif;color:#17211c;font-size:11px;-webkit-print-color-adjust:exact;print-color-adjust:exact}" +
       ".bar{position:sticky;top:0;background:#1f3a5a;color:#fff;padding:10px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;font-size:14px}.bar button{font:inherit;font-weight:700;border:0;border-radius:8px;padding:8px 14px;background:#fff;color:#1f3a5a;cursor:pointer}" +
       ".page{padding:16px 20px;max-width:900px;margin:0 auto}.page+.page{break-before:page;page-break-before:always}header{border-bottom:2px solid #1f3a5a;padding-bottom:8px;margin-bottom:10px}.co{font-size:11px;color:#55625b}h1{font-size:20px;margin:4px 0 6px}" +
       ".meta{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:12px}.sum{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid #c9d3cd;border-radius:6px;margin:10px 0}.sum div{padding:6px 10px;border-right:1px solid #e1e7e3}.sum div:last-child{border:0}.sum span{display:block;font-size:10.5px;color:#55625b}.sum b{font-size:17px}.sum b.r{color:#b42318}.sum b.a{color:#9a5b00}" +
-      "h3{font-size:13px;margin:14px 0 6px;padding-left:6px;border-left:3px solid #1f3a5a}table{width:100%;border-collapse:collapse}th,td{border:1px solid #c9d3cd;padding:3px 5px;text-align:left;vertical-align:top}th{background:#eef2f0;font-weight:700;white-space:nowrap}tr{break-inside:avoid}" +
+      "h3{font-size:13px;margin:14px 0 6px;padding-left:6px;border-left:3px solid #1f3a5a}table{width:100%;border-collapse:collapse}th,td,button,h1,h3{font-family:inherit}th,td{border:1px solid #c9d3cd;padding:3px 5px;text-align:left;vertical-align:top}th{background:#eef2f0;font-weight:700;white-space:nowrap}tr{break-inside:avoid}" +
       "tr.no td.st{color:#b42318;font-weight:700}tr.ab td{background:#fdf6e9}tr.ab td.st{color:#9a5b00;font-weight:700}.none{color:#55625b}" +
       ".sign{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:20px;break-inside:avoid}.sign div{border:1px solid #c9d3cd;height:64px;padding:4px 8px;font-size:11px;color:#55625b}" +
       "@media print{.bar{display:none}.page{padding:0;max-width:none}}";
